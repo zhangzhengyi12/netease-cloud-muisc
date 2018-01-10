@@ -24,7 +24,7 @@ export default class App extends Vue {}
   position relative
   mx-height-line(1.8rem)
   color #fff
-  font-size 0.8rem
+  font-size .7rem
   .return
     position absolute
     left 0

@@ -1,0 +1,1 @@
+export const loginState = (state:any) => state.userLoginState

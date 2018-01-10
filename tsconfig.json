@@ -10,5 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noImplicitAny": true,
+    "lib":["es2015"]
   }
 }
