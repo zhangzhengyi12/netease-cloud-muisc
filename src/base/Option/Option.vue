@@ -1,7 +1,9 @@
 <template>
-<div class="item"  :class="{mini : isMini, new : isNew, active: isActive}">
+<div class="item"  :class="{mini : isMini, new : isNew, active: isActive}"  @click="onClick">
+<span ref="scaleTarget" class="scale">
 <i :class="iconCls" class="icon"></i>
-<span v-show="!mini">{{name}}</span>
+<span v-show="!isMini">{{name}}</span>
+</span>
 </div>
   
 </template>
@@ -9,8 +11,9 @@
 <script lang='ts'>
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { Prop } from 'vue-property-decorator'
 @Component({
-  name: 'option',
+  name: 'option-item',
   props: {
     name: {
       type: String,
@@ -31,23 +34,54 @@ import Component from 'vue-class-component'
     isNew: {
       type: Boolean,
       default: false
+    },
+    id: {
+      type: Number,
+      default: 0
     }
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  scaleAnima(): void {
+    // console.log(this.$refs.scaleTarget as HTMLElement)
+    (this.$refs.scaleTarget as HTMLElement).style.transform = `scale(.95,.95)`
+    setTimeout(() => {
+      (this.$refs.scaleTarget as HTMLElement).style.transform = ``
+    }, 200)
+  }
+  @Prop() name: string
+  id: number
+  onClick(e: any) {
+    this.scaleAnima()
+    const item = {
+      name: this.name,
+      id: this.id
+    }
+    this.$emit('click', item)
+  }
+}
 </script>
 
 <style lang='stylus' scoped>
 @import '~common/css/variable.styl'
-
 .item
-  font-size .8rem
+  font-size 0.75rem
   color $color-font-black
-  padding .5rem 0
+  padding 0.55rem 0
   cursor pointer
   &:hover
     background-color $color-bar-pick
-  .icon 
+  &.active
+    border-left 2px solid $color-theme-red
+    background $color-bar-pick
+    width calc(100% - 2px)
+    background-origin border-box
+    .icon
+      margin-left calc(0.5rem - 2px)
+  .scale
+    display inline-block
+    transition scale 0.2s
+  .icon
     font-size 1rem
-    margin 0 .5rem
+    margin 0 0.5rem
 </style>

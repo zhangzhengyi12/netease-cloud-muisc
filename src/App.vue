@@ -29,8 +29,9 @@ import { State, Action } from 'vuex-class'
   }
 })
 export default class App extends Vue {
-  @State('userLoginState') loginState: string
+  @State('userLoginState') loginState: any
   @Action('changeUserLoginState') changeloginState: any
+
 
   login(message: object) {
     requestLogin(message).then(
@@ -48,6 +49,10 @@ export default class App extends Vue {
       }
     )
   }
+
+  // 获取用户的基本信息 全部传入 bar中
+
+  
 }
 </script>
 
