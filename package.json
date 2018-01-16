@@ -13,9 +13,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "v-bar": "^3.0.0",
     "vue": "^2.5.2",
     "vue-property-decorator": "^6.0.0",
     "vue-router": "^3.0.1",
+    "vuebar": "^0.0.18",
     "vuex-class": "^0.3.0"
   },
   "devDependencies": {
@@ -89,6 +91,7 @@
     "vue-property-decorator": "^6.0.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
+    "vue-ts-loader": "^0.0.3",
     "vuex": "^3.0.1",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",

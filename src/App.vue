@@ -17,8 +17,8 @@ import OptionsBar from 'components/options-bar/options-bar.vue'
 import initOptions from 'common/js/initOptionDefaultData.ts'
 import Login from 'components/login/login.vue'
 import requestLogin from 'api/login.ts'
-
-import { State, Action } from 'vuex-class'
+import throttle from 'common/js/util'
+import { State, Action, Mutation } from 'vuex-class'
 
 @Component({
   name: 'App',
@@ -31,8 +31,18 @@ import { State, Action } from 'vuex-class'
 export default class App extends Vue {
   @State('userLoginState') loginState: any
   @Action('changeUserLoginState') changeloginState: any
+  @Mutation('SET_CLIENT_VIEWPORT') setViewport: any
 
-
+  mounted() {
+    window.onresize = throttle(this.checkUpdateViewport, 50)
+  }
+  checkUpdateViewport() {
+    const view = {
+      width: document.body.clientWidth,
+      height: window.innerHeight
+    }
+    this.setViewport(view)
+  }
   login(message: object) {
     requestLogin(message).then(
       (res: any) => {
@@ -51,8 +61,6 @@ export default class App extends Vue {
   }
 
   // 获取用户的基本信息 全部传入 bar中
-
-  
 }
 </script>
 

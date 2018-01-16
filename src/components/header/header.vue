@@ -29,6 +29,7 @@ export default class App extends Vue {}
     position absolute
     left 0
     padding 0 1rem
+    cursor pointer
     &:hover
       background rgb(232,16,35)
 </style>
