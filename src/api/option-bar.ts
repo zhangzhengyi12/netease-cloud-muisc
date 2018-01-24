@@ -1,9 +1,9 @@
-import request from './request.ts'
+import request from './request'
 
 const getUserPlaylist = function(uid:any) {
   const target = '/user/playlist'
   const query = {uid}
-  return request({target,query})
+  return request({target,query},false)
 }
 
-export default getUserPlaylist
+export {getUserPlaylist}

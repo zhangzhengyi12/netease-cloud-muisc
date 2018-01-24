@@ -56,7 +56,7 @@ import Component from 'vue-class-component'
 import initData from 'common/js/initOptionDefaultData'
 import OptionItem from 'base/Option/Option.vue'
 import { State } from 'vuex-class'
-import getUserPlaylist from 'api/getUserPlaylist'
+import { getUserPlaylist } from 'api/option-bar'
 import normalizePlayList from 'common/js/playList'
 import { Watch } from 'vue-property-decorator'
 
@@ -97,6 +97,8 @@ export default class App extends Vue {
     // 如果是基本组件，就直接pushname
     if (item.id < BASE_ID_LIMIT) {
       this.toggleBaseComponent(item.name)
+    } else {
+      this.toggleSonglist(String(item.id))
     }
   }
   currActive(id: number) {
@@ -104,6 +106,10 @@ export default class App extends Vue {
   }
   toggleBaseComponent(name: string) {
     this.$router.push(`/${name}`)
+  }
+  toggleSonglist(id: string) {
+    id = id.toString()
+    this.$router.push({ name: 'songlistDetail', params: { id } })
   }
   getPlaylist() {
     const userID = this.loginState.userState.profile.userId
@@ -120,18 +126,19 @@ export default class App extends Vue {
   }
   checkNeedMini() {
     if (this.viewport.width < MINI_WIDTH) {
-      console.log(this.viewport)
       this.isMini = true
     } else {
       this.isMini = false
     }
   }
   @Watch('viewport')
-  onViewPortChange(val: any) {this.checkNeedMini()}
+  onViewPortChange(val: any) {
+    this.checkNeedMini()
+  }
 }
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
 @import '~common/css/variable.styl'
 .wrapper
   width 12rem
@@ -151,6 +158,8 @@ export default class App extends Vue {
 .bar
   // width 12rem
   flex-shrink 0
+  flex-grow 1
+  align-self flex-start
   padding 0.5rem 0 0 0
   text-align left
   background $color-background-grey

@@ -48,6 +48,8 @@ export default class App extends Vue {
 .login
   pos-center(18rem, 28em, 5rem)
   border 1px solid #eee
+  position absolute
+  z-index 1000
   .close
     color #aaa
     position absolute

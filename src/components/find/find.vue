@@ -11,7 +11,12 @@
       <!-- border 为了重叠 破坏一下结构   -->
       <div class="border"></div>
     </ul>
+       <v-bar id="view" ref='vbar' autoHide="3000">
+    <keep-alive>
     <router-view></router-view>
+    </keep-alive>
+        </v-bar>
+
   </div>
 </template>
 
@@ -19,25 +24,36 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import baseMenuData from 'common/js/initFindMenuBaseData'
+import VBar from 'v-bar'
+
+interface Vbar extends Vue{
+  toggleHide():void
+  hide():void
+}
 @Component({
-  name: 'find'
+  name: 'find',
+  components: {
+    VBar
+  }
 })
 export default class App extends Vue {
   activeId = -1
   baseMenuData = baseMenuData
-  
-  mounted(){
+
+  mounted() {
     this.initActiveRoute()
   }
-  toggleRouter(name:string,index:number){
+  toggleRouter(name: string, index: number) {
     this.$router.push({
       name
     })
-    this.activeId = index 
+    this.activeId = index
+    // 重新激活一下滚动组件
+    ;(this.$refs.vbar as Vbar ).hide()
   }
-  initActiveRoute(){
-    this.baseMenuData.forEach((el:any,index:any)=>{
-      if(el.componentName === this.$router.app.$route.name){
+  initActiveRoute() {
+    this.baseMenuData.forEach((el: any, index: any) => {
+      if (el.componentName === this.$router.app.$route.name) {
         this.activeId = index
       }
     })
@@ -45,8 +61,9 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 .find
   padding 1rem 1.5rem
   .title
@@ -74,4 +91,6 @@ export default class App extends Vue {
       &.active
         color $color-font-red
         border-bottom 2px solid $color-font-red
+#view
+  viewStyle()
 </style>

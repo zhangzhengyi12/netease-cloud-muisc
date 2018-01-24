@@ -1,12 +1,31 @@
 mx-height-line(n)
-  height n 
+  height n
   line-height n
-
-pos-center(w,h,top){
+pos-center(w, h, top)
   width w
   height h
   position absolute
   top top
   left 50%
-  margin-left:  - (w / 2)
-}
+  margin-left - (w / 2)
+iconRadius(n)
+  height n
+  line-height n
+  width n
+  height n
+  border-radius 50%
+mask()
+  position fixed
+  top 0
+  bottom 0
+  left 0
+  right 0
+  background transparent
+  z-index 88
+viewStyle()
+  margin 0 auto
+  width 100%
+  height calc(100vh - 9rem)
+  .bar--wrapper
+  .bar--vertical
+    margin-right 0

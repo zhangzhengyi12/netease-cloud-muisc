@@ -24,7 +24,7 @@ const InitOptions: optionsGroup[] = [
       },
       {
         name: 'find',
-        iconCls: 'i_music_26',
+        iconCls: 'i_music_40',
         name_zh:'发现音乐',
         id:1
       },
@@ -53,7 +53,7 @@ const InitOptions: optionsGroup[] = [
       },
       {
         name: 'myradio',
-        iconCls: 'i_radio_21',
+        iconCls: 'i_radio_35',
         id: 5,
         name_zh: '我的电台'
       },

@@ -7,7 +7,8 @@ import hostStation from '@/components/host-station/host-station.vue'
 import lastMusic from '@/components/last-music/last-music.vue'
 import singer from '@/components/singer/singer.vue'
 import songList from '@/components/song-list/song-list.vue'
-
+import Detail from '@/components/detail/detail.vue'
+import SonglistDetail from '@/components/song-list-detail/song-list-detail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +18,20 @@ export default new Router({
       name: 'HelloWorld',
       component: HelloWorld,
       redirect: 'find'
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: Detail,
+      redirect:'/',
+      children: [
+        {
+          path: 'songlistDetail/:id',
+          name: 'songlistDetail',
+          component: SonglistDetail,
+          props:true
+        }
+      ]
     },
     {
       path: '/find',

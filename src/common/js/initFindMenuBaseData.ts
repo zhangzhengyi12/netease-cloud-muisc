@@ -16,10 +16,11 @@ const routers: Array<routerLink> = [
     componentName: 'hostStation',
     title: '主播电台'
   },
+  // {
+  //   componentName: 'lastMusic',
+  //   title: '最新音乐'
+  // }, {
   {
-    componentName: 'lastMusic',
-    title: '最新音乐'
-  }, {
     componentName: 'singer',
     title: '歌手'
   }

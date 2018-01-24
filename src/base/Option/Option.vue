@@ -1,9 +1,9 @@
 <template>
   <div class="item" :class="{mini : isMini, new : isNew, active: isActive}" @click="onClick">
-    <span ref="scaleTarget" class="scale">
+    <click-anima ref="scaleTarget">
       <i :class="iconCls" class="icon"></i>
       <span v-show="!isMini" class="name">{{nameZh}}</span>
-    </span>
+    </click-anima>
   </div>
 
 </template>
@@ -12,6 +12,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
+import ClickAnima from 'base/click-anima/click-anima.vue'
 @Component({
   name: 'option-item',
   props: {
@@ -43,20 +44,15 @@ import { Prop } from 'vue-property-decorator'
       type: Number,
       default: 0
     }
+  },
+  components:{
+    ClickAnima
   }
 })
 export default class App extends Vue {
-  scaleAnima(): void {
-    // console.log(this.$refs.scaleTarget as HTMLElement)
-    ;(this.$refs.scaleTarget as HTMLElement).style.transform = `scale(.95,.95)`
-    setTimeout(() => {
-      ;(this.$refs.scaleTarget as HTMLElement).style.transform = ``
-    }, 200)
-  }
   @Prop() name: string
   id: number
   onClick(e: any) {
-    this.scaleAnima()
     const item = {
       name: this.name,
       id: this.id

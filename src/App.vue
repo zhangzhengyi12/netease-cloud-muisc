@@ -3,7 +3,7 @@
     <m-header></m-header>
     <div class="content-box">
     <options-bar class="options"></options-bar>
-    <router-view class="view"/>
+    <router-view class="appview"/>
     </div>
     <!-- <Login :show="true" @login="login"></Login> -->
   </div>
@@ -16,7 +16,7 @@ import MHeader from 'components/header/header.vue'
 import OptionsBar from 'components/options-bar/options-bar.vue'
 import initOptions from 'common/js/initOptionDefaultData.ts'
 import Login from 'components/login/login.vue'
-import requestLogin from 'api/login.ts'
+import { userLogin, zhijie } from 'api/login.ts'
 import throttle from 'common/js/util'
 import { State, Action, Mutation } from 'vuex-class'
 
@@ -35,6 +35,7 @@ export default class App extends Vue {
 
   mounted() {
     window.onresize = throttle(this.checkUpdateViewport, 50)
+    // zhijie()
   }
   checkUpdateViewport() {
     const view = {
@@ -44,7 +45,7 @@ export default class App extends Vue {
     this.setViewport(view)
   }
   login(message: object) {
-    requestLogin(message).then(
+    userLogin(message).then(
       (res: any) => {
         if (res.body.code === 200) {
           console.log(res)
@@ -72,6 +73,6 @@ export default class App extends Vue {
   text-align center
   .content-box
     display flex
-    .view
+    .appview
       width 100%
 </style>
