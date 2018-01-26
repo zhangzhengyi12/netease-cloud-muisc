@@ -12,9 +12,11 @@
       <div class="border"></div>
     </ul>
        <v-bar id="view" ref='vbar' autoHide="3000">
+        <transition name='view-fade'>
     <keep-alive>
     <router-view></router-view>
     </keep-alive>
+        </transition>
         </v-bar>
 
   </div>
@@ -23,12 +25,12 @@
 <script lang='ts'>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import baseMenuData from 'common/js/initFindMenuBaseData'
+import { routers } from 'common/js/initData'
 import VBar from 'v-bar'
 
-interface Vbar extends Vue{
-  toggleHide():void
-  hide():void
+interface Vbar extends Vue {
+  toggleHide(): void
+  hide(): void
 }
 @Component({
   name: 'find',
@@ -38,7 +40,7 @@ interface Vbar extends Vue{
 })
 export default class App extends Vue {
   activeId = -1
-  baseMenuData = baseMenuData
+  baseMenuData = routers
 
   mounted() {
     this.initActiveRoute()
@@ -49,7 +51,7 @@ export default class App extends Vue {
     })
     this.activeId = index
     // 重新激活一下滚动组件
-    ;(this.$refs.vbar as Vbar ).hide()
+    ;(this.$refs.vbar as Vbar).hide()
   }
   initActiveRoute() {
     this.baseMenuData.forEach((el: any, index: any) => {
@@ -93,4 +95,9 @@ export default class App extends Vue {
         border-bottom 2px solid $color-font-red
 #view
   viewStyle()
+
+.view-fade-enter,.view-fade-leave-to
+  opacity 0
+.view-fade-enter-active,.view-fade-leave-active
+  transition opacity .5s
 </style>

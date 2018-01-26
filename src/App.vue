@@ -6,6 +6,7 @@
     <router-view class="appview"/>
     </div>
     <!-- <Login :show="true" @login="login"></Login> -->
+    <player></player>
   </div>
 </template>
 
@@ -14,8 +15,9 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import MHeader from 'components/header/header.vue'
 import OptionsBar from 'components/options-bar/options-bar.vue'
-import initOptions from 'common/js/initOptionDefaultData.ts'
+import initOptions from 'common/js/initData.ts'
 import Login from 'components/login/login.vue'
+import Player from 'components/player/player.vue'
 import { userLogin, zhijie } from 'api/login.ts'
 import throttle from 'common/js/util'
 import { State, Action, Mutation } from 'vuex-class'
@@ -25,7 +27,8 @@ import { State, Action, Mutation } from 'vuex-class'
   components: {
     MHeader,
     OptionsBar,
-    Login
+    Login,
+    Player
   }
 })
 export default class App extends Vue {
@@ -60,8 +63,6 @@ export default class App extends Vue {
       }
     )
   }
-
-  // 获取用户的基本信息 全部传入 bar中
 }
 </script>
 

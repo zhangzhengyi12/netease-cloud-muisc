@@ -35,7 +35,7 @@ import Loading from 'base/loading/loading.vue'
 import ClickAnima from 'base/click-anima/click-anima.vue'
 import throttle from 'common/js/util.ts'
 import ChooseTable from 'base/choose-table/choose-table.vue'
-import { hotTag, allTag } from 'common/js/tag.ts'
+import { hotTag, allTag } from 'common/js/secondaryData.ts'
 
 const playlistPlaceholder = require('@/assets/logo.png')
 const DEF_LIMIT = 30

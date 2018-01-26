@@ -3,19 +3,20 @@ const LC_KEY: string = '__netease__'
 
 const LOGIN_KEY: string = LC_KEY + 'LOGIN'
 
-interface cacheObj  {
-  set: (n: any) => any;
-  get: (def: any) => any;
+interface cacheObj {
+  set: <t>(vat: t, key: string) => t
+  get: <t>(def: t, key: string) => any | t
 }
 
-export const userLoginState:cacheObj = {
-  set(Login: any) {
-    lscache.set(LOGIN_KEY, Login)
-    return Login
+
+export const cache: cacheObj = {
+  set<t>(val: t, key: string): t {
+    lscache.set(key + LC_KEY, val)
+    return val
   },
-  get(def: any) {
-    let result = lscache.get(LOGIN_KEY)
-    if (result) return result
+  get<t>(def: t, key: string): any {
+    let r = lscache.get(key + LC_KEY)
+    if (r) return r
     return def
   }
 }

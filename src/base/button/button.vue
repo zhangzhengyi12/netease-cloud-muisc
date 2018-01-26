@@ -18,14 +18,18 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
 
 .button
-  padding .1rem .5rem
-  border 1px solid #ccc
-  background #fff
+  padding .3rem .5rem
+  border 1px solid rgb(190,190,190)
+  background-color rgb(233,233,233)
+  display flex
+  align-items center
+  cursor pointer
   i
     font-size .8rem
+    margin-right .3rem
   .text
     font-size .6rem
 

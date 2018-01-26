@@ -53,7 +53,7 @@
 import Vue from 'vue'
 import VBar from 'v-bar'
 import Component from 'vue-class-component'
-import initData from 'common/js/initOptionDefaultData'
+import { InitOptions } from 'common/js/initData'
 import OptionItem from 'base/Option/Option.vue'
 import { State } from 'vuex-class'
 import { getUserPlaylist } from 'api/option-bar'
@@ -75,7 +75,7 @@ const BASE_ID_LIMIT: number = 100
 export default class App extends Vue {
   isMini: boolean = false
   activeID: number = 1
-  publicList = initData
+  publicList = InitOptions
   userPlaylist: any = null
   @State('userLoginState') loginState: any
   @State('viewport') viewport: any

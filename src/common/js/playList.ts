@@ -1,5 +1,3 @@
-import index from '../../../node_modules/_vue-router@3.0.1@vue-router'
-
 // 对接口做删减在未来可能会造成维护上的困难，尽量全部保留只是对列表进行拆i分
 
 interface normalized {

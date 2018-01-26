@@ -1,13 +1,13 @@
 <template>
 
-<div class="song-list-detail">
+<div class="song-list-detail" ref="detail">
   <div class="blur" ref="blur"></div>
   <transition name="mask">
     <div class="mask-back" v-if="tryGetData"><loading class="loading"></loading></div>
   </transition>
-  <div class="content">
+  <div class="content" v-if="this.songlistData">
     <div class="title">歌单</div>
-    <div class="song-list-message" v-if="this.songlistData">
+    <div class="song-list-message">
       <MusicItem :data="songlistDataToMusicItemAdapter(songlistData)" class="cover"></MusicItem>
       <div class="content">
         <h3 class="name">{{songlistData.name}}</h3>
@@ -21,6 +21,13 @@
         </div>
       </div>
     </div>
+    <div class="top-bar">
+      <div class="play-all">
+        <i class="i_play icon"></i>
+        <span class="text">播放全部({{songlistData.trackCount}})</span>
+      </div>
+    </div>
+    <song-list-view v-if="songlistData" :tracks="songlistData.tracks"></song-list-view>
   </div>
 </div>
   
@@ -34,6 +41,7 @@ import { getSonglistDetail } from 'api/song-list.ts'
 import Loading from 'base/loading/loading.vue'
 import MusicItem from 'base/music-item/music-item.vue'
 import MyButton from 'base/button/button.vue'
+import SongListView from 'components/song-list-view/song-list-view.vue'
 
 interface Date {
   Format(date: any): string
@@ -45,41 +53,46 @@ const CODE_OK = 200
   components: {
     Loading,
     MusicItem,
-    MyButton
+    MyButton,
+    SongListView
   }
 })
 export default class App extends Vue {
   @Prop() id: number
   tryGetData: boolean = true
-  songlistData:null |{
-    createTime:number
+  songlistData: null | {
+    createTime: number
   } = null
+  tryGetEventId: number = 0
   mounted() {
     this.getSonglistDetailData(this.id)
+    // 为歌单详情组件撑起一个高度
+    ;this.beforeUpdateInit()
   }
   @Watch('$route')
   onchangeRoute() {
     this.getSonglistDetailData(this.id)
+    // 暂时取消掉detail组件的高度
+    this.beforeUpdateInit()
   }
   getSonglistDetailData(id: number) {
+    const currid = Math.random()
+    this.tryGetEventId = currid
     this.tryGetData = true
     getSonglistDetail(id).then(
       (res: any) => {
         if (res.body.code === CODE_OK) {
+          // 避免网络较慢而高频点击出现的回溯现象
+          if (currid !== this.tryGetEventId) return
           const backUrl: string = res.body.result.coverImgUrl
-          this.tryGetData = false
           this.songlistData = res.body.result
-          this.setbackgroundImageBlur(backUrl)
+          this.afterUpdateReset(backUrl)
         }
       },
       (err: any) => {
         this.$message('获取歌单错误')
       }
     )
-  }
-  setbackgroundImageBlur(url: string) {
-    console.log(2);
-    ;(this.$refs.blur as HTMLElement).style.backgroundImage = `url(${url})`
   }
   songlistDataToMusicItemAdapter(item: any) {
     return {
@@ -92,6 +105,14 @@ export default class App extends Vue {
       return (new Date(this.songlistData.createTime) as Date).Format('yyyy-MM-dd')
     }
   }
+  afterUpdateReset(url: string) {
+    this.tryGetData = false
+    ;(this.$refs.blur as HTMLElement).style.backgroundImage = `url(${url})`
+    ;(this.$refs.detail as HTMLElement).style.height = ''
+  }
+  beforeUpdateInit() {
+    ;(this.$refs.detail as HTMLElement).style.height = '81vh'
+  }
 }
 </script>
 
@@ -102,19 +123,21 @@ export default class App extends Vue {
 
 .song-list-detail
   width 100%
+  // 为了暂时让detail页面消失滚动，固定高度，提前设置Hidden
+  overflow hidden
   margin 0 auto
-  height 1200px
   position relative
+  background-color rgb(250,250,250)
   padding-top 1rem
   .blur
     position absolute
     top 0
     width 100%
-    filter blur(90px)
+    filter blur(80px)
     background line-gradient(transparent, #fff)
-    background-size 100% 4rem
+    background-size 100% 5rem
     background-repeat no-repeat
-    height 4rem
+    height 10rem
     z-index 0
   .loading
     margin-top 40vh !important
@@ -128,12 +151,33 @@ export default class App extends Vue {
     background #fff
     z-index 10
   .content
-    width 96%
+    width 94%
     margin 0 auto
     .title
       font-size .7rem
       color $color-font-grey-title
       text-align left
+    .top-bar
+      display flex
+      margin-top 1.2rem
+      .play-all
+        display flex
+        align-items center
+        cursor pointer
+        margin-left 1rem
+        & > *
+          margin-right .3rem
+        .icon
+          display inline-block
+          color $color-theme-red
+          font-size .3rem
+          width .8rem
+          height .8rem
+          border-radius 50%
+          border 1px solid $color-theme-red
+          line-height .8rem
+        .text
+          font-size .8rem
     .song-list-message
       display flex
       flex-direction row
@@ -143,18 +187,22 @@ export default class App extends Vue {
         width 35%
         max-width 12rem
         margin-top 0rem
+        margin-right .6rem
+        & > *
+          width 100%
       .content
         display flex
         flex-direction column
         justify-content flex-start
         align-items flex-start
         .name
-          margin-top .2rem
+          margin-top .2re
         .creator
           display flex
           margin-top .8rem
           flex-direction row
           align-items center
+          z-index 1
           img
             width 1.6rem
             border-radius 50%
@@ -165,6 +213,9 @@ export default class App extends Vue {
           .date
             font-size .6rem
             color $color-font-grey-title
+        .button-group
+          margin-top .7rem
+          z-index 1
 
 .mask-leave-to
   opacity 0

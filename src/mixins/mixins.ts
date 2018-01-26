@@ -24,10 +24,36 @@ class configMixin extends Vue {
     MusicItem
   }
 })
-class musicItemMixin extends Vue{
+class musicItemMixin extends Vue {}
 
-}  
-
-
-
-export { configMixin,musicItemMixin }
+@Component({})
+class timeAndArtisitMixin extends Vue {
+  caluArtists(artists: Array<any>): string {
+    let res: Array<any> = []
+    artists.forEach(item => {
+      res.push(item.name)
+    })
+    return res.join('/')
+  }
+  caluTime(dur: number, needTrans: boolean = true): string {
+    let time: number
+    if (needTrans) {
+      time = dur / 1000
+    } else {
+      time = dur
+    }
+    time = Math.floor(time)
+    let m, s
+    if (time < 60) {
+      s = time
+      m = '00'
+    } else {
+      s = Math.floor(time % 60)
+      m = Math.floor(time / 60)
+      if (m < 10) m = `0${m}`
+    }
+    if (s < 10) s = `0${s}`
+    return `${m}:${s}`
+  }
+}
+export { configMixin, musicItemMixin, timeAndArtisitMixin }

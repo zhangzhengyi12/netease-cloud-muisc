@@ -25,7 +25,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { getArtists } from 'api/singer.ts'
 import { musicItemMixin } from '@/mixins/mixins.ts'
-import AZMap from 'common/js/A-Z-map.ts'
+import { AZMap } from 'common/js/secondaryData.ts'
 interface allSinger {
   [props: string]: { cate: string; list: Array<any> }
 }
@@ -37,7 +37,7 @@ export default class App extends Vue {
   indexMap = AZMap
   currentIndex = 0
   currentSingerlist: Array<any> = []
-  allSinger:allSinger = {"init":{cate:'',list:[]}}
+  allSinger: allSinger = { init: { cate: '', list: [] } }
   mounted() {
     getArtists().then(
       (res: any) => {

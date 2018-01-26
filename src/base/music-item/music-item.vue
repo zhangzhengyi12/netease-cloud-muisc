@@ -1,5 +1,5 @@
 <template>
-  <div class="songlist">
+  <div class="songlist" @click="$emit('click')">
       <div class="content">
         <div class="count" v-if="this.data.playCount"><i :class="[this.countIcon ? this.countIcon : 'i_music_40']" style="margin-right:3px;"></i>{{ caluCount }}</div>
         <img v-lazy="this.data.picUrl" :alt="this.data.name" ref="img"/>

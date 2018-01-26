@@ -1,15 +1,46 @@
+// recomend menu
+interface routerLink {
+  componentName: string
+  title: string
+}
+
+const routers: Array<routerLink> = [
+  {
+    componentName: 'recommend',
+    title: '个性推荐'
+  },
+  {
+    componentName: 'songList',
+    title: '歌单'
+  },
+  {
+    componentName: 'hostStation',
+    title: '主播电台'
+  },
+  // {
+  //   componentName: 'lastMusic',
+  //   title: '最新音乐'
+  // }, {
+  {
+    componentName: 'singer',
+    title: '歌手'
+  }
+]
+
+// bar options
+
 interface option {
-  name: string;
-  name_zh: string;
-  iconCls: string;
+  name: string
+  name_zh: string
+  iconCls: string
   id: number
 }
 interface optionsList {
-  [prop:number]:option
+  [prop: number]: option
 }
 interface optionsGroup {
-  title: null|string;
-  list:optionsList
+  title: null | string
+  list: optionsList
 }
 
 const InitOptions: optionsGroup[] = [
@@ -18,15 +49,15 @@ const InitOptions: optionsGroup[] = [
     list: [
       {
         name: 'search',
-        name_zh:'搜索',
+        name_zh: '搜索',
         iconCls: 'i_search',
-        id:0
+        id: 0
       },
       {
         name: 'find',
         iconCls: 'i_music_40',
-        name_zh:'发现音乐',
-        id:1
+        name_zh: '发现音乐',
+        id: 1
       },
       {
         name: 'mv',
@@ -49,7 +80,7 @@ const InitOptions: optionsGroup[] = [
         name: 'lastpaly',
         iconCls: 'i_time',
         id: 4,
-        name_zh:'最近播放'
+        name_zh: '最近播放'
       },
       {
         name: 'myradio',
@@ -67,5 +98,6 @@ const InitOptions: optionsGroup[] = [
   }
 ]
 
-export default InitOptions
+const initPlayData = { currentIndex: -1, playlist: [], sequenceList: [], mode: 0, fullScreen: false, playing: false }
 
+export { routers, InitOptions, initPlayData }

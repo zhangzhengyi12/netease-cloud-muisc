@@ -54,6 +54,7 @@
     :data="item"
     :key="index"
     :index="index"
+    @click="selectPlaylist(index)"
     >
     </music-item>
   </div>
@@ -73,7 +74,8 @@
   <!-- <new-song-list :list="newSongs"></new-song-list> -->
 
   <!-- 主播电台 -->
-  <tip-title iconCls='i_video' title="推荐MV"/>
+  <div class="r-dj">
+<tip-title iconCls='i_video' title="推荐MV"/>
   <div class="recommend-mvs">
     <music-item v-for="(mv,index) of mvs"
       class="mv"
@@ -83,6 +85,8 @@
       countIcon="i_camera">
     </music-item>
   </div>
+  </div>
+
 
   <tip-title iconCls='i_radio' title="主播电台"/>
   <div class="djs">
@@ -127,7 +131,7 @@ const CODE_OK = 200
 interface bannerData {
   body: {
     banners: Array<any>
-    code:number
+    code: number
   }
 }
 
@@ -140,12 +144,12 @@ interface bannerData {
     NewSongList,
     DjItem
   },
-  mixins:[musicItemMixin]
+  mixins: [musicItemMixin]
 })
 export default class App extends Vue {
   banners: any = null
   type = 'card'
-  songlist = null
+  songlist: null | Array<{ id: number }> = null
   privates = null
   newSongs = null
   mvs = null
@@ -170,7 +174,7 @@ export default class App extends Vue {
   getBannerData() {
     getBanner().then(
       (res: any) => {
-        if (( res.body.code === CODE_OK)) {
+        if (res.body.code === CODE_OK) {
           const banners = res.body.banners as Array<any>
           banners.forEach((item, index) => {
             item.lazyData = {
@@ -206,6 +210,10 @@ export default class App extends Vue {
         this.$message('获取推荐歌单')
       }
     )
+  }
+  selectPlaylist(index: number) {
+    const id: string = (this.songlist as Array<{ id: number }>)[index].id.toString()
+    this.$router.push({ name: 'songlistDetail', params: { id } })
   }
   getPrivateContentData(): void {
     getPrivateContent().then(
