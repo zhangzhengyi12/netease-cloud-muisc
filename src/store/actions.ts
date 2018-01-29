@@ -2,10 +2,10 @@ import * as types from './mutation-type.ts'
 import { cache } from 'common/js/cache.ts'
 import { ActionTree } from 'vuex'
 import { shuffle, findIndexOf } from 'common/js/util.ts'
-import { playMode } from 'common/js/playMode'
+import { playMode } from 'common/js/config'
 
 const changeUserLoginState = function({ commit }: any, login: any) {
-  commit(types.SET_USER_LOGIN, cache.set(login,'LOGIN'))
+  commit(types.SET_USER_LOGIN, cache.set(login, 'LOGIN'))
 }
 const selectPlay = function({ commit, state }: any, { list, index }: any) {
   commit(types.SET_SEQUENCE_LIST, list)
@@ -23,7 +23,7 @@ const selectPlay = function({ commit, state }: any, { list, index }: any) {
 
 const deleteSong = function({ commit, state }: any, song: any) {
   let sequenceList = state.playData.sequenceList.slice()
-  let playlist = state.playData.playList.slice()
+  let playlist = state.playData.playlist.slice()
   let currentIndex = state.playData.currentIndex
 
   const sIndex = sequenceList.findIndex((item: any) => {
@@ -50,7 +50,6 @@ const deleteSong = function({ commit, state }: any, song: any) {
   commit(types.SET_SEQUENCE_LIST, sequenceList)
   commit(types.SET_CURRENT_INDEX, currentIndex)
   const playState = playlist.length > 0
-  commit(types.SET_PLAYING_STATE, playState)
 }
 
 const clearPlayList = function({ commit }: any) {
@@ -60,13 +59,22 @@ const clearPlayList = function({ commit }: any) {
   commit(types.SET_PLAYING_STATE, false)
 }
 
-const randomPlay = function({ commit }: any, list: Array<any>) {
+const toggleRandomPlay = function({ commit, state }: any) {
+  let list = state.playData.playlist
+  let randomList = shuffle(list)
+  let index = findIndexOf(randomList, list[state.playData.currentIndex])
+  commit(types.SET_PLAYLIST, randomList)
   commit(types.SET_PLAY_MODE, playMode.random)
-  commit(types.SET_SEQUENCE_LIST, list)
-  commit(types.SET_PLAYLIST, shuffle(list))
-  commit(types.SET_CURRENT_INDEX, 0)
-  commit(types.SET_FULL_SCREEN, true)
-  commit(types.SET_PLAYING_STATE, true)
+  commit(types.SET_CURRENT_INDEX, index)
+}
+
+const toggleSequPlay = function({ commit, state }: any) {
+  let slist = state.playData.sequenceList
+  let plist = state.playData.playlist
+  let index = findIndexOf(slist, plist[state.playData.currentIndex])
+  commit(types.SET_PLAYLIST, slist)
+  commit(types.SET_PLAY_MODE, playMode.sequence)
+  commit(types.SET_CURRENT_INDEX, index)
 }
 
 const insertSong = function({ commit, state }: any, song: any) {
@@ -116,8 +124,9 @@ const actions: ActionTree<any, any> = {
   selectPlay,
   deleteSong,
   insertSong,
-  randomPlay,
-  clearPlayList
+  toggleRandomPlay,
+  clearPlayList,
+  toggleSequPlay
 }
 
 export default actions

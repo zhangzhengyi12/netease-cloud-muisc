@@ -1,9 +1,9 @@
 import request from './request'
-
-const getUserPlaylist = function(uid:any) {
+import cacheRequest from './api-cache'
+const getUserPlaylist = function(uid: any) {
   const target = '/user/playlist'
-  const query = {uid}
-  return request({target,query},false)
+  const query = { uid }
+  return cacheRequest({ target, query }, false)
 }
 
-export {getUserPlaylist}
+export { getUserPlaylist }

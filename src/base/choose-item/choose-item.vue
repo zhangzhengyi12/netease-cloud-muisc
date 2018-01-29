@@ -38,6 +38,7 @@ export default class App extends Vue{
 <style lang='stylus'>
 
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 
 .choose-item
   display flex
@@ -47,7 +48,7 @@ export default class App extends Vue{
   height 1.5rem
   font-size .75rem
   color $color-font-grey-title
-  border 1px solid rgba(200,200,200,.5)
+  commonBorder()
   margin-right .5rem
   position relative
   margin-bottom .5rem

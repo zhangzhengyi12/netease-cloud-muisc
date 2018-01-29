@@ -106,7 +106,7 @@ export default class App extends Vue {
   .mini-table
     font-size .6rem
     padding .2rem .4rem
-    border 1px solid rgba(200,200,200,.5)
+    commonBorder()
     background #fff
     margin-top 1.2rem
   .compon-table

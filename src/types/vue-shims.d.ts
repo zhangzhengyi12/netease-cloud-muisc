@@ -38,3 +38,9 @@ interface track {
 declare interface tracks {
   [props: number]: track
 }
+
+declare interface playlistData {
+  body: {
+    playlist: Array<any>
+  }
+}

@@ -35,6 +35,7 @@ export default class App extends Vue {
 
 <style lang='stylus' scoped>
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 .dj
   display flex
   align-items center

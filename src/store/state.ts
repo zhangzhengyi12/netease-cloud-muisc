@@ -6,7 +6,7 @@ import { initPlayData } from 'common/js/initData'
 interface playData {
   playing: boolean
   fullScreen: boolean
-  playList: Array<any>
+  playlist: Array<any>
   sequenceList: Array<any>
   mode: number
   currentIndex: number

@@ -29,7 +29,7 @@ export default class App extends Vue {
 
 .tip-title
   width 100%
-  border-bottom 1px solid rgba(200,200,200,.5)
+  border-bottom 1px solid $color-border-grey
   padding-bottom .5rem
   margin-top 1.2rem
   display flex

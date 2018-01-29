@@ -31,7 +31,7 @@ const throttle = function(func: any, wait: number, options?: any) {
   }
 }
 
-export function shuffle(arr:Array<any>):Array<any> {
+export function shuffle(arr: Array<any>): Array<any> {
   arr = arr.slice()
   for (let i = 0; i < arr.length; i++){
     let j = getRandomInt(0, i)

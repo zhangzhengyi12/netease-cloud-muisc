@@ -127,3 +127,39 @@ declare interface Date {
 重构了很多文件结构，让他们的行为更加单一
 
 TODO: 初始化数据文件的合并，common必须重新整合 缓存需要更加的统一集中
+
+
+## 1/27 ##
+
+播放进度拖动的
+flex-shriack是伸缩，是空间不足情况下的伸缩率
+
+```js
+
+*playModeFSM(Cmode: number) {
+    let first,
+      next = []
+    for (let key in Object.keys(playMode)) {
+      if (playMode[key] === Cmode) {
+        first = Cmode
+      } else {
+        next.push(playMode[key])
+      }
+    }
+    while(true){
+      yield first
+      for(let n of next){
+        yield n
+      }
+    }
+  }
+
+```
+
+flex有个玩法是给固定的宽度，但是让他grow， 这个宽度最后会成为他的最小值shrik = 0
+
+基本完成了播放器的功能 模式切换什么的，还得加上播放加载音乐时的加载动画，还有没有音乐的基本样式，可以加载一个默认的currentSong
+
+
+
+## 注意 如果在Vue组件里对DOM强依赖，比如在组件mounted的时候利用Nexttick来获取某个DOM的宽度，就必须使用if条件渲染，如果使用v-show。在执行生命周期的时候这个组件根本还没有被加载到DOM中。

@@ -32,7 +32,7 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
 
 .list-view
   margin-top 1rem

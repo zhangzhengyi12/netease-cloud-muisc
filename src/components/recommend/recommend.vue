@@ -269,6 +269,7 @@ export default class App extends Vue {
 <style lang='stylus' scoped>
 
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 
 .recommend
   width 90%
@@ -324,7 +325,7 @@ export default class App extends Vue {
     .item
       width 33%
       &:nth-child(n + 2)
-       border-left 1px solid rgba(200,200,200,.5)
+        border-left 1px solid $color-border-grey
       a
         display flex
         justify-content center
@@ -396,7 +397,7 @@ export default class App extends Vue {
   margin-top .5rem
   .dj
     width 50%
-    border-bottom  1px solid rgba(200,200,200,.5)
+    border-bottom 1px solid $color-border-grey
     margin-bottom .5rem
     padding-bottom .5rem
 </style>

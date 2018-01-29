@@ -63,7 +63,7 @@ export default class App extends Vue {
     font-size .8rem
     text-align center
     color #fff
-    border 1px solid rgba(200,200,200,.5)
+    commonBorder()
   .name
     font-size .8rem
     display inline-block
@@ -73,5 +73,5 @@ export default class App extends Vue {
     margin .3rem 0
   img
     max-width 100%
-    border 1px solid rgba(200,200,200,.5)
+    commomBorder()
 </style>

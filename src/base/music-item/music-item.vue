@@ -43,6 +43,7 @@ export default class App extends Vue {
 
 <style lang='stylus' scoped>
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 .songlist
   margin-top 1.5rem
   transition  filter .5s
@@ -81,5 +82,5 @@ export default class App extends Vue {
       color $color-font-grey-title
     img
       max-width 100%
-      border 1px solid rgba(200,200,200,.5)
+      commonBorder()
 </style>

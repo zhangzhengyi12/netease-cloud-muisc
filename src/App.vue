@@ -51,7 +51,6 @@ export default class App extends Vue {
     userLogin(message).then(
       (res: any) => {
         if (res.body.code === 200) {
-          console.log(res)
           this.changeloginState({
             isLogin: true,
             userState: res.body
@@ -59,7 +58,6 @@ export default class App extends Vue {
         }
       },
       (err: any) => {
-        console.log(err)
       }
     )
   }

@@ -84,7 +84,7 @@ export default class App extends Vue {
       height 1px
       width 100%
       bottom 0px
-      background rgba(200,200,200,.5)
+      background $color-border-grey
     .link
       padding 0.6rem
       cursor pointer

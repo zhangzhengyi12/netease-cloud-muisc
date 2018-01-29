@@ -45,7 +45,7 @@ export default class App extends Vue {
         this.currentSingerlist = res['热门'].list
       },
       (err: any) => {
-        console.log(err)
+        this.$message('获取歌手错误')
       }
     )
   }
@@ -63,6 +63,7 @@ export default class App extends Vue {
 
 <style lang='stylus'>
 @import '~common/css/variable.styl'
+@import '~common/css/mixins.styl'
 .singer 
   width 90%
 .index
@@ -77,7 +78,7 @@ export default class App extends Vue {
     &.active
       color $color-font-red
     &:nth-child(n + 1){
-      border-right 1px solid rgba(200,200,200,.5)
+      commonBorder()
     }
     &:last-child
       border-right none
