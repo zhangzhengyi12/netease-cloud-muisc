@@ -119,6 +119,27 @@ const insertSong = function({ commit, state }: any, song: any) {
   commit(types.SET_PLAYING_STATE, true)
 }
 
+const insertPlay = function({ commit, state }: any, song: any) {
+  let playList = state.playData.playlist.slice()
+  let sequenceList = state.playData.sequenceList.slice()
+  let currentIndex = state.playData.currentIndex
+
+  let currentSong = state.playData.playlist[currentIndex]
+  currentIndex++ // 注意++ 删除操作依赖
+  let fpIndex = findIndexOf(playList, currentSong)
+  playList.splice(currentIndex, 0, song)
+
+  let currentSIndex = findIndexOf(sequenceList, currentSong) + 1
+  let fsIndex = findIndexOf(sequenceList, song)
+  sequenceList.splice(currentSIndex, 0, song)
+
+  commit(types.SET_PLAYLIST, playList)
+  commit(types.SET_CURRENT_INDEX, currentIndex++)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
+  commit(types.SET_FULL_SCREEN, true)
+  commit(types.SET_PLAYING_STATE, true)
+}
+
 const actions: ActionTree<any, any> = {
   changeUserLoginState,
   selectPlay,
@@ -126,7 +147,8 @@ const actions: ActionTree<any, any> = {
   insertSong,
   toggleRandomPlay,
   clearPlayList,
-  toggleSequPlay
+  toggleSequPlay,
+  insertPlay
 }
 
 export default actions

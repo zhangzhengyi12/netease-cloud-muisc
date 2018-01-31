@@ -10,6 +10,7 @@ interface playData {
   sequenceList: Array<any>
   mode: number
   currentIndex: number
+  isRadio:boolean
 }
 interface state {
   userLoginState: {

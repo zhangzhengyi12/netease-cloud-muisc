@@ -1,6 +1,7 @@
 import * as types from './mutation-type.ts'
 import { MutationTree } from 'vuex'
 import { cache } from 'common/js/cache'
+import { stat } from 'fs'
 
 const mutations: MutationTree<any> = {
   [types.SET_USER_LOGIN](state: any, logininfo: any) {
@@ -29,6 +30,10 @@ const mutations: MutationTree<any> = {
   },
   [types.SET_CURRENT_INDEX](state, index) {
     state.playData.currentIndex = index
+    cache.set(state.playData, 'playData')
+  },
+  [types.SET_PLAY_TYPE](state, isRadio) {
+    state.playData.isRadio = isRadio
     cache.set(state.playData, 'playData')
   }
 }

@@ -25,7 +25,7 @@
           :highLight="index === currentIndex"
           @click="togglePlay(index)">
           </song-view>
-          <img :src="IMG_CLOSE" class="delete" @click="del(index)" alt="删除歌曲">
+          <img :src="IMG_CLOSE" class="delete" @click.stop="del(index)" alt="删除歌曲">
       </div>
     </div>
   </v-bar>

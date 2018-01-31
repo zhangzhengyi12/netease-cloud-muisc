@@ -13,7 +13,8 @@ interface requestData {
 const cacheRequest = function(data: requestData, needCooike: boolean = false) {
   // 尝试从本地获取，并检验时间戳
   let target = data.target
-  let tryCache = lscache.get(target + API_KEY)
+  let keys = Object.keys(data.target)
+  let tryCache = lscache.get(target +  + API_KEY)
   return new Promise((resolve, reject) => {
     if (tryCache && Date.now() - tryCache.timetamp < SIXHOUR) {
       resolve(tryCache)

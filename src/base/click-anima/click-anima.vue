@@ -16,6 +16,7 @@ export default class App extends Vue {
   scaleAnima(): void {
     ;(this.$refs.scaleTarget as HTMLElement).style.transform = `scale(.95,.95)`
     setTimeout(() => {
+      if (!this.$refs.scaleTarget) return
       ;(this.$refs.scaleTarget as HTMLElement).style.transform = ``
     }, 200)
   }

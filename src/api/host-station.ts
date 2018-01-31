@@ -13,4 +13,24 @@ const getDjRecommend = function() {
   return request({ target }, false)
 }
 
-export { getDjCatelist, getDjRecommend }
+const getCateRecommend = function(type: number) {
+  const target = '/dj/recommend/type'
+  const query = {
+    type: type
+  }
+  return request({ target, query }, false)
+}
+
+const getDjDetail = function(rid: number) {
+  const target = '/dj/detail'
+  const query = { rid }
+  return request({ target, query }, false)
+}
+
+const getDjPrograms = function(rid: number) {
+  const target = '/dj/program'
+  const query = { rid }
+  return request({ target, query }, false)
+}
+
+export { getDjCatelist, getDjRecommend, getCateRecommend, getDjDetail, getDjPrograms }

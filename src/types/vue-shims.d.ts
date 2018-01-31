@@ -44,3 +44,5 @@ declare interface playlistData {
     playlist: Array<any>
   }
 }
+
+declare module 'lyric-parser'

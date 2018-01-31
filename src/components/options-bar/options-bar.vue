@@ -81,6 +81,7 @@ export default class App extends Vue {
   @State('viewport') viewport: any
 
   mounted() {
+    this.checkRoute()
     this.checkNeedMini()
     // 如果用户已经登录，那么获取用户的歌单
     if (this.loginState.isLogin) {
@@ -91,6 +92,13 @@ export default class App extends Vue {
   toggleBar(e: any): void {
     // 根据不同IDType 来调动路由进行页面组件的展示
     this.isMini = !this.isMini
+  }
+  checkRoute() {
+    if (this.$route.params) {
+      // 如果当前路由为歌单组件
+      let id: any = Number(this.$route.params.id)
+      this.activeID = id
+    }
   }
   onSelectItem(item: { name: string; id: number }) {
     this.activeID = item.id

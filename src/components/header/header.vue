@@ -23,6 +23,7 @@ export default class App extends Vue {}
   background $color-theme-red
   position relative
   mx-height-line(1.8rem)
+  z-index 10000
   color #fff
   font-size .7rem
   .return

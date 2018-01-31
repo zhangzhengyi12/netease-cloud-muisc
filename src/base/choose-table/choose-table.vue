@@ -85,8 +85,7 @@ export default class App extends Vue {
     }
   }
   onSelect(value: string) {
-    this.tag = value
-    this.$emit('toggleTag', this.tag)
+    this.$emit('toggleTag', value)
     this.needDisCom = false
   }
   toggleDisCom() {

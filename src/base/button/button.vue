@@ -23,7 +23,7 @@ export default class App extends Vue {
 .button
   padding .3rem .5rem
   border 1px solid rgb(190,190,190)
-  background-color rgb(233,233,233)
+  background-color rgba(240,240,240,.5)
   display flex
   align-items center
   cursor pointer

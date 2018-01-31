@@ -16,7 +16,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import SongView from 'base/song-view/song-view.vue'
-import { Action } from 'vuex-class'
+import { Action, Mutation } from 'vuex-class'
 @Component({
   name: 'songListView',
   components: {
@@ -25,9 +25,11 @@ import { Action } from 'vuex-class'
 })
 export default class App extends Vue {
   @Prop() tracks: tracks
-  @Action('selectPlay') selectPlay:any
+  @Action('selectPlay') selectPlay: any
+  @Mutation('SET_PLAY_TYPE') setType: any
   togglePlay(index: number): void {
-    this.selectPlay({list:this.tracks, index})
+    this.selectPlay({ list: this.tracks, index })
+    this.setType(false)
   }
 }
 </script>

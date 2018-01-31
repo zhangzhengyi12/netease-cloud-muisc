@@ -1,5 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import MusicItem from 'base/music-item/music-item.vue'
+import { Getter, Mutation, Action } from 'vuex-class'
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -56,4 +57,11 @@ class timeAndArtisitMixin extends Vue {
     return `${m}:${s}`
   }
 }
-export { configMixin, musicItemMixin, timeAndArtisitMixin }
+
+// player mixin
+
+@Component({})
+class playerMixin extends Vue{
+
+}  
+export { configMixin, musicItemMixin, timeAndArtisitMixin,playerMixin }

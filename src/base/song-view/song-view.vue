@@ -8,7 +8,7 @@
       {{ track.name }}
       <span class="alias" v-if="track.alias[0]">({{track.alias[0]}})</span>
       </span>
-    <i class="i_video mv" v-if="track.mvid !== 0"></i>
+    <i class="i_video mv" v-if="track.mvid !== 0 && !isSimple"></i>
   </div>
   <div class="body">
     <span class="artists">{{caluArtists(track.artists)}}</span>

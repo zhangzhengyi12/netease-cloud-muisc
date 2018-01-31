@@ -1,6 +1,6 @@
 <template>
 
-<span class="cate-item">
+<span class="cate-item" @click="$emit('click')">
   <img :src="picUrl" :alt="name">
   <span class="name">{{name}}</span>
 </span>

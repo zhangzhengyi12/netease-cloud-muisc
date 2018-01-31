@@ -18,6 +18,7 @@
       :key="index"
       :index="index"
       :data="playlist"
+      @click="selectPlaylist(index)"
       ></music-item>
     </div>
 
@@ -65,6 +66,7 @@ export default class App extends Vue {
   noMoreData: boolean = false
   sameDataCount: number = 0
   requestLock: boolean = false
+  sequenceList:any = []
   mounted() {
     this.getHighqualityPlaylistData()
   }
@@ -89,6 +91,7 @@ export default class App extends Vue {
           }
           this.currentTagMax = Number(res.body.total)
           this.playlists = this.playlistDataToMusicItemDataAdapter(res.body.playlists)
+          this.sequenceList = res.body.playlists
           this.requestLock = false
         }
       },
@@ -137,6 +140,11 @@ export default class App extends Vue {
     if (cLength < 1) return
     if (this.noMoreData) return
     this.getHighqualityPlaylistData(this.tag, cLength + DEF_LIMIT)
+  }
+  selectPlaylist(index: number) {
+    // console.log(playlist)
+    const id: string = (this.sequenceList as Array<{ id: number }>)[index].id.toString()
+    this.$router.push({ name: 'songlistDetail', params: { id } })
   }
 }
 </script>

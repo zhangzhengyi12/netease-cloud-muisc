@@ -2,9 +2,11 @@
 
 <div class="player">
 <div class="mini-player">
-  <div class="album-pic" v-if="currentSong">
-    <img :src="currentSong.album.blurPicUrl" alt="">
-    <div class="open"></div>
+  <div class="album-pic" v-if="currentSong" @click="toggleMainPlayer">
+    <img :src="[this.isRadio ? this.currentSong.coverUrl : this.currentSong.album.blurPicUrl]" alt="" class="pic">
+    <div class="open">
+     <img :src="[disMainPlayer ? IMG_CLOSED : IMG_OPEN ]" alt="">
+    </div>
   </div>
   <div class="control">
     <div class="button prev" @click="togglePrev">
@@ -53,8 +55,10 @@
     </div>
   </div>
 </div>
- <audio @ended="playEnd"  :src="getSongURL" @canplay="ready" ref="audio" @error.stop="onError" @timeupdate="updateTime"></audio>
-
+ <audio  @ended="playEnd"  :src="songUrl" @canplay="ready" ref="audio" @error.stop="onError" @timeupdate="updateTime"></audio>
+ <transition name="amp">
+<!-- <main-player ref='main' class="main" @close="toggleMainPlayer" v-show="disMainPlayer"></main-player> -->
+ </transition>
 </div>
   
 </template>
@@ -67,8 +71,11 @@ import { timeAndArtisitMixin } from '@/mixins/mixins'
 import { Watch } from 'vue-property-decorator'
 import ProgressBar from 'base/progress-bar/progress-bar.vue'
 import { getUserPlaylist } from 'api/option-bar.ts'
-import { addCollectToPlayList } from 'api/player.ts'
+import { addCollectToPlayList, getSongUrl } from 'api/player.ts'
 import Playlist from 'components/play-list/play-list.vue'
+import MainPlayer from 'components/main-player/main-player.vue'
+import { playerMixin } from '@/mixins/mixins.ts'
+import { currentSong } from '../../store/getter'
 const playMode: {
   [prop: string]: number
 } = {
@@ -84,6 +91,14 @@ const PlayModeNameMap: {
   2: '随机播放'
 }
 
+interface seek {
+  $refs: {
+    mainPlayer: {
+      setSeek: (seek: number) => void
+    }
+  }
+}
+
 const DEF_VOLUM = 0.5
 
 interface playlistData {
@@ -93,10 +108,11 @@ interface playlistData {
 }
 @Component({
   name: 'player',
-  mixins: [timeAndArtisitMixin],
+  mixins: [timeAndArtisitMixin, playerMixin],
   components: {
     ProgressBar,
-    Playlist
+    Playlist,
+    MainPlayer
   }
 })
 export default class App extends Vue {
@@ -106,6 +122,7 @@ export default class App extends Vue {
   @Getter('playing') playing: boolean
   @Getter('playMode') playMode: number
   @Getter('currentIndex') currentIndex: number
+  @Getter('isRadio') isRadio: boolean
   @Mutation('SET_PLAYING_STATE') setPlayState: any
   @Mutation('SET_CURRENT_INDEX') setCurrentIndex: any
   @Mutation('SET_PLAY_MODE') setPlayMode: any
@@ -119,6 +136,8 @@ export default class App extends Vue {
   disVolume: boolean = false
   disPlaylist: boolean = false
   songLoading: boolean = false
+  disMainPlayer: boolean = false
+  songUrl: any = null
   IMG_PREV = require('@/assets/prev.svg')
   IMG_NEXT = require('@/assets/next.svg')
   IMG_PAUSE = require('@/assets/pause.svg')
@@ -130,16 +149,21 @@ export default class App extends Vue {
   IMG_LOOP = require('@/assets/loop.svg')
   IMG_SOUND = require('@/assets/sound.svg')
   IMG_LIST = require('@/assets/list.svg')
+  IMG_OPEN = require('@/assets/open.svg')
+  IMG_CLOSED = require('@/assets/closed.svg')
   mounted() {
     this.modeFSM = this.playModeFSM(this.playMode)
     this.$nextTick(() => {
       this.volumeSet(DEF_VOLUM)
     })
+    this.getUrl()
   }
   get noPlaylist() {
     return this.playlist.length === 0
   }
   get getSongURL(): string {
+    if (this.isRadio) {
+    }
     return `http://music.163.com/song/media/outer/url?id=${this.currentSong.id}.mp3`
   }
   caluPercent(): any {
@@ -203,6 +227,9 @@ export default class App extends Vue {
       }
     }, 30)
   }
+  toggleMainPlayer() {
+    this.disMainPlayer = !this.disMainPlayer
+  }
   changePercent(p: number) {
     const currentTime = Number(p * (this.currentSong.duration / 1000))
     ;(this.$refs.audio as HTMLAudioElement).currentTime = currentTime
@@ -210,6 +237,8 @@ export default class App extends Vue {
       this.togglePlaying()
     }
     this.currentTime = currentTime
+    let main: any = this.$refs.main
+    main.setSeek(currentTime)
   }
   playEnd() {
     if (this.playMode === playMode.loop) {
@@ -225,12 +254,12 @@ export default class App extends Vue {
   }
   reInitData() {
     this.currentTime = 0
-    this.songLoading = true
   }
   volumeSet(v: number) {
     ;(this.$refs.audio as HTMLAudioElement).volume = v
     this.volume = v
   }
+
   get caluPlayModeCls(): any {
     let res = ''
     switch (this.playMode) {
@@ -282,6 +311,23 @@ export default class App extends Vue {
     //   this.$message('添加至歌单错误')
     // }
   }
+  getRadioUrl() {
+    getSongUrl(this.currentSong.mainSong.id).then(
+      (res: any) => {
+        if ((res.body.code = 200)) {
+          this.songUrl = res.body.data[0].url
+        }
+      },
+      (err: any) => {}
+    )
+  }
+  getUrl() {
+    if (this.isRadio) {
+      this.getRadioUrl()
+    } else {
+      this.songUrl = `http://music.163.com/song/media/outer/url?id=${this.currentSong.id}.mp3`
+    }
+  }
   onError() {
     this.$message('抱歉，这首歌暂时无法播放，播放下一首')
     this.toggleNext()
@@ -296,8 +342,12 @@ export default class App extends Vue {
     })
   }
   @Watch('currentSong')
-  onCurrengSongChange() {
+  onCurrengSongChange(newS: any, oS: any) {
     this.reInitData()
+    if (newS.id !== oS.id) {
+      this.songLoading = true
+      this.getUrl()
+    }
   }
 }
 </script>
@@ -325,9 +375,20 @@ export default class App extends Vue {
     width 60px
     flex-shrink 0
     overflow hidden
+    position relative
+    cursor pointer
     img
       width 100%
       commonBorder()
+      transition filter .1s
+    &:hover
+      .pic
+        filter: brightness(60%); 
+      .open
+        position absolute
+        margin-top .2rem
+        img
+          width 100%
   .control
     display flex
     margin-left .5rem
@@ -428,6 +489,21 @@ export default class App extends Vue {
         bottom 3rem
         right .5rem
 
+.main
+  position fixed
+  width 100%
+  // height 100px
+  bottom 60px
+  background #ccc
+  top 1.8rem
+  z-index 998
+
+.amp-enter,.amp-leave-to
+  transform scale(.3) translate3d(-100vw,300vh,500px)
+  opacity 0
+.amp-enter-active,.amp-leave-active
+  transition all .3s
+
 // 动画
 
 .fade-enter,.fade-leave-to
@@ -435,6 +511,5 @@ export default class App extends Vue {
   transform translateY(20px)
 .fade-enter-active,.fade-leave-active
   transition all .3s
-
 
 </style>

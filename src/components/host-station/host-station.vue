@@ -6,11 +6,14 @@
       :key="index"
       :name="cate.name"
       :picUrl="cate.pic84x84IdUrl"
+      @click="selectCate(cate)"
       class="cate"></cate>
     </div>
     <tip-title title="电台推荐" iconCls="i_music"></tip-title>
     <div class="recommend-djs">
+      <loading v-if="recommendDjs.length ===0" style="margin:3rem auto"/>
     <music-item v-for="(item,index) of recommendDjs"
+    @click="selectDj(item)"
     class="dj"
     :data="item"
     :key="index"
@@ -24,16 +27,18 @@
 <script lang='ts'>
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { getDjCatelist, getDjRecommend } from 'api/host-station'
+import { getDjCatelist, getDjRecommend, getCateRecommend } from 'api/host-station'
 import { configMixin, musicItemMixin } from '@/mixins/mixins'
 import Cate from 'base/cate/cate.vue'
 import TipTitle from 'base/tip-title/tip-title.vue'
+import Loading from 'base/loading/loading.vue'
 @Component({
   name: 'hostStation',
   mixins: [configMixin, musicItemMixin],
   components: {
     Cate,
-    TipTitle
+    TipTitle,
+    Loading
   }
 })
 export default class hostStation extends Vue {
@@ -65,6 +70,24 @@ export default class hostStation extends Vue {
       }
     )
   }
+  getCateRecommendData(type: number) {
+    getCateRecommend(type).then(
+      (res: any) => {
+        if ((res.body.code = 200)) {
+          this.recommendDjs = res.body.djRadios
+        }
+      },
+      (err: any) => {}
+    )
+  }
+  selectCate(cate: any) {
+    this.recommendDjs = []
+    this.getCateRecommendData(cate.id)
+  }
+  selectDj(item: any) {
+    let id: any = item.id
+    this.$router.push({ name: 'stationDetail', params: { id } })
+  }
 }
 </script>
 
@@ -84,6 +107,7 @@ export default class hostStation extends Vue {
 .recommend-djs
   display flex
   flex-wrap wrap
+  padding-bottom 2rem
   .dj
     width 20%
     @media screen and (max-width 900px) and (min-width 550px){
