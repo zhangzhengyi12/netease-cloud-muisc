@@ -15,7 +15,7 @@
     :index = "index"
     :key = "index"
     :data="singerListToMusicItemAdapter(item)"
-    class="singer-item"></music-item>
+    class="singer-item" @click="toggleSingerDetail(item)"></music-item>
   </div>
 </div>
 </template>
@@ -58,6 +58,9 @@ export default class App extends Vue {
   toggleIndex(index: string) {
     this.currentSingerlist = this.allSinger[index].list
   }
+  toggleSingerDetail(s:any){
+    this.$router.push({ name: 'singerDetail', params: { id: s.id } })
+  }
 }
 </script>
 
@@ -78,7 +81,7 @@ export default class App extends Vue {
     &.active
       color $color-font-red
     &:nth-child(n + 1){
-      commonBorder()
+      border-right 1px solid $color-border-grey
     }
     &:last-child
       border-right none

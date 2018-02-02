@@ -21,12 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="top-bar">
-      <div class="play-all">
-        <i class="i_play icon"></i>
-        <span class="text">播放全部({{songlistData.trackCount}})</span>
-      </div>
-    </div>
+
     <song-list-view v-if="songlistData" :tracks="songlistData.tracks"></song-list-view>
   </div>
 </div>
@@ -157,27 +152,6 @@ export default class App extends Vue {
       font-size .7rem
       color $color-font-grey-title
       text-align left
-    .top-bar
-      display flex
-      margin-top 1.2rem
-      .play-all
-        display flex
-        align-items center
-        cursor pointer
-        margin-left 1rem
-        & > *
-          margin-right .3rem
-        .icon
-          display inline-block
-          color $color-theme-red
-          font-size .3rem
-          width .8rem
-          height .8rem
-          border-radius 50%
-          border 1px solid $color-theme-red
-          line-height .8rem
-        .text
-          font-size .8rem
     .song-list-message
       display flex
       flex-direction row

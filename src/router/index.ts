@@ -10,6 +10,7 @@ import songList from '@/components/song-list/song-list.vue'
 import Detail from '@/components/detail/detail.vue'
 import SonglistDetail from '@/components/song-list-detail/song-list-detail.vue'
 import StationDetail from '@/components/station-detail/station-detail.vue'
+import SingerDetail from '@/components/singer-detail/singer-detail.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -36,6 +37,12 @@ export default new Router({
           path: 'stationDetail/:id',
           name: 'stationDetail',
           component: StationDetail,
+          props: true
+        },
+        {
+          path: 'singerDetail/:id',
+          name: 'singerDetail',
+          component: SingerDetail,
           props: true
         }
       ]

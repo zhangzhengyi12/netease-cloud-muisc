@@ -4,6 +4,7 @@ import lscache from 'lscache'
 import { resolve } from 'dns'
 const LC_KEY: string = '__netease__'
 import pinyin from 'js-pinyin'
+import { read } from 'fs'
 // 需要连续缓存，特殊化
 pinyin.setOptions({ checkPolyphone: false, charCase: 0 })
 
@@ -96,4 +97,36 @@ const pinyinSort = function(arr: Array<any>) {
   return result
 }
 
-export { getArtists }
+const getSingerDetail = function(id: number) {
+  const target = '/artists'
+  const query = {
+    id
+  }
+  return request({ target, query }, false)
+}
+
+const getSingerAlbums = function(id: number, limit: number) {
+  const target = '/artist/album'
+  const query = {
+    id,
+    limit
+  }
+  return request({ target, query }, false)
+}
+
+const getSingerDesc = function(id: number) {
+  const target = '/artist/desc'
+  const query = {
+    id
+  }
+  return request({ target, query }, false)
+}
+
+const getSimiSinger = function(id: number) {
+  const target = '/simi/artist'
+  const query = {
+    id
+  }
+  return request({ target, query }, true)
+}
+export { getArtists, getSingerDetail, getSingerAlbums, getSingerDesc, getSimiSinger }

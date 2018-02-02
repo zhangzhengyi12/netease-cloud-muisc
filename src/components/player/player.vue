@@ -57,7 +57,7 @@
 </div>
  <audio  @ended="playEnd"  :src="songUrl" @canplay="ready" ref="audio" @error.stop="onError" @timeupdate="updateTime"></audio>
  <transition name="amp">
-<!-- <main-player ref='main' class="main" @close="toggleMainPlayer" v-show="disMainPlayer"></main-player> -->
+<main-player ref='main' class="main" @close="toggleMainPlayer" v-show="disMainPlayer"></main-player>
  </transition>
 </div>
   
@@ -347,6 +347,8 @@ export default class App extends Vue {
     if (newS.id !== oS.id) {
       this.songLoading = true
       this.getUrl()
+    }else{
+      this.loop()
     }
   }
 }
@@ -437,6 +439,8 @@ export default class App extends Vue {
         text-align left 
         overflow hidden
         white-space nowrap
+        display flex
+        align-items center
         .artitis
           color $color-font-grey-artisit
           display inline-block

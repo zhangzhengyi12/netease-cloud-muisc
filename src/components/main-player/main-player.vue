@@ -14,7 +14,7 @@
       <div class="name">
         {{currentSong.name}}
       </div>
-      <div class="more">
+      <div class="more" v-if="!isRadio">
         <div class="album">
           <span class="title">专辑：</span>
           <span class="text">
@@ -28,12 +28,43 @@
           </span>
         </div>
       </div>
-      <div class="lyric">
+      <div class="more" v-if="isRadio">
+         <div class="album">
+          <span class="title">主播：</span>
+          <span class="text">
+          {{currentSong.artists[0].name}}
+          </span>
+        </div>
+        <div class="singer" @click="toggleStationDetail">
+          <span class="title">来源：</span>
+          <span class="text">
+            {{currentSong.radio.name}}
+          </span>
+        </div>
+        <div class="host" @click="toggleStationDetail">
+          <span class="title">电台：</span>
+          <span class="text">
+            {{currentSong.radio.name}}
+          </span>
+        </div>
+      </div>
+      <div class="lyric" v-if="!isRadio">
         <lyric ref="lyric" :id="currentSong.id" :playing="playing"></lyric>
+      </div>
+      <!-- radio模式下 显示电台的详细信息 -->
+      <div class="radio" v-if="isRadio">
+        <div class="top">
+        <span class="time">创建时间: {{transTime(currentSong.createTime)}}</span>
+        <span class="count">已播放： {{caluCountToWan(currentSong.listenerCount)}}</span>
+        </div>
+        <div class="bot">
+          <span class="type">{{currentSong.radio.category}}</span>
+          <span class="des">{{currentSong.description}}</span>
+        </div>
       </div>
     </div>
     </div>
-    <div class="tail" @wheel="onWheel">
+    <div class="tail" @wheel="onWheel" v-if="!isRadio">
       <div class="comment" >
          <div class="title">
            评论 &nbsp;
@@ -58,7 +89,7 @@
         </div>
         <loading></loading>
       </div>
-      <div class="simi">
+      <div class="simi" v-if="!isRadio">
         <div class="title">相似歌曲</div>
         <div class="songs">
           <div v-for="(song,index) of simiSongs"
@@ -83,7 +114,7 @@ import VBar from 'v-bar'
 import CD from 'base/cd/cd.vue'
 import { timeAndArtisitMixin } from '@/mixins/mixins'
 import Lyric from 'base/lyric/lyric.vue'
-import { getSimiSong, getSongComment } from 'api/player.ts'
+import { getSimiSong, getSongComment, getDjComment } from 'api/player.ts'
 import Comment from 'components/comment/comment.vue'
 import Loading from 'base/loading/loading.vue'
 const NEED_MORE_PER_COM = 0.8
@@ -105,6 +136,7 @@ export default class App extends Vue {
   @Getter('playlist') playlist: any
   @Getter('playing') playing: boolean
   @Getter('playMode') playMode: number
+  @Getter('isRadio') isRadio: boolean
   @Getter('currentIndex') currentIndex: number
   @Mutation('SET_PLAYING_STATE') setPlayState: any
   @Mutation('SET_CURRENT_INDEX') setCurrentIndex: any
@@ -121,12 +153,25 @@ export default class App extends Vue {
   currentCommentOffset = 0
   MoreLoading = false
   mounted() {
-    this.getSimiData(this.currentSong.id)
-    this.getCommentData(this.currentSong.id, DEF_COMMENT_LIMIT)
+    let id = this.currentSong.id
+    if (!this.isRadio) {
+      this.getSimiData(id)
+      this.getCommentData(id, DEF_COMMENT_LIMIT)
+    }
   }
   setSeek(seek: number) {
     let lyric: any = this.$refs.lyric
     lyric.setSeek(seek)
+  }
+  transTime(time: number): string | undefined {
+    let date: Date = new Date(time)
+    if (time && date.Format) {
+      return date.Format('yyyy-MM-dd')
+    }
+  }
+  toggleStationDetail() {
+    this.$router.push({ name: 'stationDetail', params: { id: this.currentSong.radio.id } })
+    this.closeMainPlayer()
   }
   getSimiData(id: number) {
     getSimiSong(id).then(
@@ -142,12 +187,20 @@ export default class App extends Vue {
   }
   onWheel() {
     let bar: any = this.$refs.bar
-    if (!bar.wrapperObj) return
+    if (!bar.wrapperObj || this.isRadio) return
     const top = bar.wrapperObj.scrollTop
     const height = bar.wrapperObj.scrollHeight
     if (this.needLoadMore(height, top)) {
       this.loadMoreCom()
     }
+  }
+  caluCountToWan(count: number) {
+    let result = ''
+    if (count < 10000) {
+      return count
+    }
+    result = `${Math.floor(count / 10000)}万`
+    return result
   }
   needLoadMore(h: number, t: number) {
     const per = t / h
@@ -159,20 +212,19 @@ export default class App extends Vue {
     this.getCommentData(this.currentSong.id, DEF_COMMENT_LIMIT, this.currentCommentOffset)
   }
   getCommentData(id: number, limit: number, offset?: number) {
-    getSongComment(id, limit, offset).then(
-      (res: any) => {
-        if (res.body.code === 200) {
-          if (res.body.hotComments) {
-            this.hotComments = res.body.hotComments
-          }
-          this.allComments = this.allComments.concat(res.body.comments)
-          this.hasMoreCom = res.body.more
-          this.commentsCount = res.body.total
-          this.MoreLoading = false
+    let dataPromise = getSongComment(id, limit, offset)
+
+    dataPromise.then((res: any) => {
+      if (res.body.code === 200) {
+        if (res.body.hotComments) {
+          this.hotComments = res.body.hotComments
         }
-      },
-      (err: any) => {}
-    )
+        this.allComments = this.allComments.concat(res.body.comments)
+        this.hasMoreCom = res.body.more
+        this.commentsCount = res.body.total
+        this.MoreLoading = false
+      }
+    })
   }
   closeMainPlayer() {
     this.$emit('close')
@@ -240,25 +292,33 @@ export default class App extends Vue {
     .cd
       z-index 1
     .lyric
-      margin-left 1rem
+      // margin-left 1rem
       @media (max-width 750px) {
         display none
       }
   .message
-    width 300px
+    width 350px
+    padding-left 3rem
     z-index 1
+    @media (max-width 750px) 
+      padding 2rem 0 0 0
     .name
       display flex
       justify-content flex-start
       color rgb(40,40,40)
+      width 100%
       text-overflow ellipsis
       overflow hidden
       white-space nowrap
+      @media (max-width 750px) 
+        justify-content center
     .more
       display flex
       flex-direction row
       font-size .7rem
       margin-top 1rem
+      @media (max-width 750px) 
+        justify-content center
       & > div
         margin-right 1rem
         text-overflow ellipsis
@@ -267,6 +327,22 @@ export default class App extends Vue {
         .text
           cursor pointer
           color $color-font-link-blue
+    .radio
+      margin-top 1rem
+      padding-top 1rem
+      border-top 1px solid rgba(200,200,200,.5)
+      font-size .7rem
+      text-align left
+      .top
+        .time
+          margin-right 1rem
+      .bot
+        margin-top 1rem
+        .type
+          color $color-theme-red
+          padding .1rem .5rem
+          border 1px solid $color-theme-red
+          margin-right 1rem
   .tail
     display flex
     justify-content center

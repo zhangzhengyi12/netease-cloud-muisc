@@ -44,4 +44,14 @@ const getSongComment = function(sid: number, limit: number, offset?: number) {
   return request({ target, query }, false)
 }
 
-export { addCollectToPlayList, getLyric, getSimiSong, getSongComment, getSongUrl }
+const getDjComment = function(sid: number, limit: number, offset?: number) {
+  const target = '/comment/dj'
+  const query: any = {
+    id: sid,
+    limit
+  }
+  if (offset) query.offset = offset
+  return request({ target, query }, false)
+}
+
+export { addCollectToPlayList, getLyric, getSimiSong, getSongComment, getSongUrl,getDjComment }

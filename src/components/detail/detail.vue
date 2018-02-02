@@ -21,7 +21,7 @@ import Component from 'vue-class-component'
 export default class App extends Vue {}
 </script>
 
-<style lang='stylus'>
+<style lang='stylus' scoped>
 @import '~common/css/variable.styl'
 @import '~common/css/mixins.styl'
 
@@ -29,4 +29,5 @@ export default class App extends Vue {}
   margin 0 auto
   width 100%
   height calc(100vh - 1.5rem - 62px)
+  background-color rgb(250,250,250)
 </style>

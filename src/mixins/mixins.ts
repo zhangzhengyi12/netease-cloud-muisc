@@ -1,5 +1,6 @@
 import { Vue, Component } from 'vue-property-decorator'
 import MusicItem from 'base/music-item/music-item.vue'
+import Loading from 'base/loading/loading.vue'
 import { Getter, Mutation, Action } from 'vuex-class'
 
 declare module 'vue/types/vue' {
@@ -61,7 +62,22 @@ class timeAndArtisitMixin extends Vue {
 // player mixin
 
 @Component({})
-class playerMixin extends Vue{
+class playerMixin extends Vue {}
 
-}  
-export { configMixin, musicItemMixin, timeAndArtisitMixin,playerMixin }
+// loadingMixin
+
+@Component({
+  components: {
+    Loading
+  }
+})
+class loadingMixin extends Vue {
+  _showLoading: boolean = true
+  showLoading() {
+    this._showLoading = true
+  }
+  disLoading() {
+    this._showLoading = false
+  }
+}
+export { configMixin, musicItemMixin, timeAndArtisitMixin, playerMixin, loadingMixin }

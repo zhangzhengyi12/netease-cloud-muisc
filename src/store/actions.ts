@@ -17,7 +17,14 @@ const selectPlay = function({ commit, state }: any, { list, index }: any) {
     commit(types.SET_PLAYLIST, list)
   }
   commit(types.SET_CURRENT_INDEX, index)
-  commit(types.SET_FULL_SCREEN, true)
+  commit(types.SET_PLAYING_STATE, true)
+}
+
+const randomPlay = function({ commit, state }: any, { list }: any) {
+  commit(types.SET_SEQUENCE_LIST, list)
+  let randomList = shuffle(list)
+  commit(types.SET_PLAYLIST, randomList)
+  commit(types.SET_CURRENT_INDEX, 0)
   commit(types.SET_PLAYING_STATE, true)
 }
 
@@ -148,7 +155,8 @@ const actions: ActionTree<any, any> = {
   toggleRandomPlay,
   clearPlayList,
   toggleSequPlay,
-  insertPlay
+  insertPlay,
+  randomPlay
 }
 
 export default actions

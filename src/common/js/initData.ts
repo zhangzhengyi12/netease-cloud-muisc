@@ -98,6 +98,8 @@ const InitOptions: optionsGroup[] = [
   }
 ]
 
+const initSingerDetailViews = ['热门50', '专辑', '歌手详情', '相似歌手']
+
 const initPlayData = { currentIndex: -1, playlist: [], sequenceList: [], mode: 0, fullScreen: false, playing: false }
 
-export { routers, InitOptions, initPlayData }
+export { routers, InitOptions, initPlayData, initSingerDetailViews }
