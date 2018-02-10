@@ -1,3 +1,4 @@
+import state from './state'
 
 export const loginState = (state: any) => state.userLoginState
 export const viewport = (state: any) => state.viewport
@@ -10,3 +11,8 @@ export const playMode = (state: any) => state.playData.mode
 export const currentIndex = (state: any) => state.playData.currentIndex
 export const currentSong = (state: any) => state.playData.playlist[state.playData.currentIndex]
 export const isRadio = (state: any) => state.playData.isRadio
+export const isRec = (state: any) => state.playData.isRec
+
+export const searchHistory = (state: any) => state.searchHistory
+
+export const playHistory = (state: any) => state.playHistory

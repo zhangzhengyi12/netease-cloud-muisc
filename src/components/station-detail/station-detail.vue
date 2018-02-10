@@ -1,41 +1,36 @@
 <template>
   <div class="station" ref="detail">
     <div class="blur" ref="blur"></div>
-  <transition name="mask">
-    <div class="mask-back" v-if="tryGetData"><loading class="loading"></loading></div>
-  </transition>
-  <div class="content" v-if="djDetail">
-    <div class="title">电台</div>
-    <div class="song-list-message">
-      <MusicItem :data="songlistDataToMusicItemAdapter(djDetail)" class="cover"></MusicItem>
-      <div class="content">
-        <h3 class="name">{{djDetail.name}}</h3>
-        <div class="creator">
-          <img :src="djDetail.dj.avatarUrl" alt="">
-          <span class="creater">{{djDetail.dj.nickname}}</span>
-        </div>
-        <div class="button-group">
-        <my-button :text="`订阅(${djDetail.subCount})`" iconCls="i_sound"></my-button>
+    <transition name="mask">
+      <div class="mask-back" v-if="tryGetData">
+        <loading class="loading"></loading>
+      </div>
+    </transition>
+    <div class="content" v-if="djDetail">
+      <div class="title">电台</div>
+      <div class="song-list-message">
+        <MusicItem :data="songlistDataToMusicItemAdapter(djDetail)" class="cover"></MusicItem>
+        <div class="content">
+          <h3 class="name">{{djDetail.name}}</h3>
+          <div class="creator">
+            <img :src="djDetail.dj.avatarUrl" alt="">
+            <span class="creater">{{djDetail.dj.nickname}}</span>
+          </div>
+          <div class="button-group">
+            <my-button :text="`订阅(${djDetail.subCount})`" iconCls="i_sound"></my-button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="top-bar">
-      <div class="play-all">
-        <i class="i_play icon"></i>
-        <span class="text">播放全部({{djDetail.programCount}})</span>
+      <div class="top-bar">
+        <div class="play-all">
+          <i class="i_play icon"></i>
+          <span class="text">播放全部({{djDetail.programCount}})</span>
+        </div>
+      </div>
+      <div class="programs">
+        <dj-view v-for="(program,index) of programs" :key="index" :data="program" :index="programs.length - 1 - index" class="program" @click="togglePlay(index)"></dj-view>
       </div>
     </div>
-    <div class="programs">
-      <dj-view
-      v-for="(program,index) of programs"
-      :key="index"
-      :data="program"
-      :index="programs.length - 1 - index"
-      class="program"
-      @click="togglePlay(index)"
-      ></dj-view>
-    </div>
-  </div>
   </div>
 </template>
 
@@ -98,7 +93,9 @@ export default class App extends Vue {
     }
   }
   afterUpdateReset(url: string) {
-    this.tryGetData = false
+    this.$nextTick(() => {
+      this.tryGetData = false
+    })
     ;(this.$refs.blur as HTMLElement).style.backgroundImage = `url(${url})`
     ;(this.$refs.detail as HTMLElement).style.height = ''
   }
@@ -115,20 +112,24 @@ export default class App extends Vue {
       item.id = item.mainSong.id
     })
   }
+  @Watch('id')
+  onIdChange() {
+    this.getDjDetailData()
+    this.getDjProgramsData()
+  }
 }
 </script>
 
 <style lang='stylus' scoped>
 @import '~common/css/variable.styl'
 @import '~common/css/mixins.styl'
-
 .station
   width 100%
   // 为了暂时让detail页面消失滚动，固定高度，提前设置Hidden
   overflow hidden
   margin 0 auto
   position relative
-  background-color rgb(250,250,250)
+  background-color rgb(250, 250, 250)
   padding-top 1rem
   padding-bottom 3rem
   .blur
@@ -156,7 +157,7 @@ export default class App extends Vue {
     width 94%
     margin 0 auto
     .title
-      font-size .7rem
+      font-size 0.7rem
       color $color-font-grey-title
       text-align left
     .top-bar
@@ -168,18 +169,18 @@ export default class App extends Vue {
         cursor pointer
         margin-left 1rem
         & > *
-          margin-right .3rem
+          margin-right 0.3rem
         .icon
           display inline-block
           color $color-theme-red
-          font-size .3rem
-          width .8rem
-          height .8rem
+          font-size 0.3rem
+          width 0.8rem
+          height 0.8rem
           border-radius 50%
           border 1px solid $color-theme-red
-          line-height .8rem
+          line-height 0.8rem
         .text
-          font-size .8rem
+          font-size 0.8rem
     .song-list-message
       display flex
       flex-direction row
@@ -189,7 +190,7 @@ export default class App extends Vue {
         width 35%
         max-width 12rem
         margin-top 0rem
-        margin-right .6rem
+        margin-right 0.6rem
         & > *
           width 100%
       .content
@@ -198,38 +199,36 @@ export default class App extends Vue {
         justify-content flex-start
         align-items flex-start
         .name
-          margin-top .2re
+          margin-top 0.2re
         .creator
           display flex
-          margin-top .8rem
+          margin-top 0.8rem
           flex-direction row
           align-items center
           z-index 1
           img
             width 1.6rem
             border-radius 50%
-            margin-right .6rem
+            margin-right 0.6rem
           .creater
-            font-size .7rem
-            margin-right .6rem
+            font-size 0.7rem
+            margin-right 0.6rem
           .date
-            font-size .6rem
+            font-size 0.6rem
             color $color-font-grey-title
         .button-group
-          margin-top .7rem
+          margin-top 0.7rem
           z-index 1
 .programs
   margin-top 1rem
   .program
     cursor pointer
     &:nth-child(odd)
-      background-color rgb(244,244,244)
+      background-color rgb(244, 244, 244)
     &:hover
-      background-color rgb(244,244,244)
-
+      background-color rgb(244, 244, 244)
 .mask-leave-to
   opacity 0
-.mask-enter-active, .mask-leave-active {
-  transition: opacity .3s;
-}
+.mask-enter-active, .mask-leave-active
+  transition opacity 0.3s
 </style>

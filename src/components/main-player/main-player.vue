@@ -9,6 +9,18 @@
   <div class="content">
     <div class="cd">
       <c-d class="cd" :cdPicUrl='currentSong.album.blurPicUrl' :playing="playing"></c-d>
+      <!-- 操控区域  only FM MODE-->
+      <div class="ctrl-group" v-if="isRec">
+        <div class="like wrap" @click="$emit('like')">
+          <img :src="[liked ? IMG_COLLECT_Y : IMG_COLLECT_N]" alt="">
+        </div>
+        <div class="next wrap" @click="$emit('next')">
+          <i class="icon i_next"></i>
+        </div>
+        <div class="trash wrap" @click="$emit('trash')">
+          <img :src="IMG_CLEAR" alt="">
+        </div>
+      </div>
     </div>
     <div class="message">
       <div class="name">
@@ -17,14 +29,14 @@
       <div class="more" v-if="!isRadio">
         <div class="album">
           <span class="title">专辑：</span>
-          <span class="text">
+          <span class="text" @click="selectAlbum(currentSong.album)">
           {{currentSong.album.name}}
           </span>
         </div>
         <div class="singer">
           <span class="title">歌手：</span>
           <span class="text">
-            {{caluArtists(currentSong.artists)}}
+            <artists @select="toggleSinger" :artists="currentSong.artists" artCls='art' @selectSinger="closeMainPlayer" />
           </span>
         </div>
       </div>
@@ -66,7 +78,7 @@
     </div>
     <div class="tail" @wheel="onWheel" v-if="!isRadio">
       <div class="comment" >
-         <div class="title">
+         <div class="title" v-show="hotComments.length!==0">
            评论 &nbsp;
            <span class="count">
              ({{commentsCount}})
@@ -87,9 +99,9 @@
          </div>
          <comment :comments="allComments" class="hot-comment"></comment> 
         </div>
-        <loading></loading>
+        <loading v-if="hasMoreCom"></loading>
       </div>
-      <div class="simi" v-if="!isRadio">
+      <div class="simi" v-if="!isRadio&&!isRec">
         <div class="title">相似歌曲</div>
         <div class="songs">
           <div v-for="(song,index) of simiSongs"
@@ -109,7 +121,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Getter, Mutation, Action } from 'vuex-class'
-import { Watch } from 'vue-property-decorator'
+import { Watch, Prop } from 'vue-property-decorator'
 import VBar from 'v-bar'
 import CD from 'base/cd/cd.vue'
 import { timeAndArtisitMixin } from '@/mixins/mixins'
@@ -117,6 +129,7 @@ import Lyric from 'base/lyric/lyric.vue'
 import { getSimiSong, getSongComment, getDjComment } from 'api/player.ts'
 import Comment from 'components/comment/comment.vue'
 import Loading from 'base/loading/loading.vue'
+import Artists from 'base/artists/artists.vue'
 const NEED_MORE_PER_COM = 0.8
 const DEF_COMMENT_LIMIT = 30
 @Component({
@@ -126,7 +139,8 @@ const DEF_COMMENT_LIMIT = 30
     Lyric,
     VBar,
     Comment,
-    Loading
+    Loading,
+    Artists
   },
   mixins: [timeAndArtisitMixin]
 })
@@ -140,10 +154,12 @@ export default class App extends Vue {
   @Getter('currentIndex') currentIndex: number
   @Mutation('SET_PLAYING_STATE') setPlayState: any
   @Mutation('SET_CURRENT_INDEX') setCurrentIndex: any
+  @Getter('isRec') isRec: boolean
   @Mutation('SET_PLAY_MODE') setPlayMode: any
   @Action('toggleRandomPlay') toggleRandomPlay: any
   @Action('toggleSequPlay') toggleSequPlay: any
   @Action('insertPlay') insertPlay: any
+  @Prop() liked: boolean
   IMG_SHRINK = require('@/assets/shrink.svg')
   simiSongs: any = []
   hotComments: any = []
@@ -152,6 +168,10 @@ export default class App extends Vue {
   hasMoreCom: boolean = true
   currentCommentOffset = 0
   MoreLoading = false
+  IMG_COLLECT_Y = require('@/assets/collect1.svg')
+  IMG_COLLECT_N = require('@/assets/collect2.svg')
+  IMG_NEXT = require('@/assets/next.svg')
+  IMG_CLEAR = require('@/assets/clear.svg')
   mounted() {
     let id = this.currentSong.id
     if (!this.isRadio) {
@@ -171,6 +191,10 @@ export default class App extends Vue {
   }
   toggleStationDetail() {
     this.$router.push({ name: 'stationDetail', params: { id: this.currentSong.radio.id } })
+    this.closeMainPlayer()
+  }
+  selectAlbum(a: any) {
+    this.$router.push({ name: 'albumDetail', params: { id: a.id } })
     this.closeMainPlayer()
   }
   getSimiData(id: number) {
@@ -225,6 +249,11 @@ export default class App extends Vue {
         this.MoreLoading = false
       }
     })
+  }
+  toggleSinger(index: number) {
+    let sid = this.currentSong.artists[index].id.toString()
+    this.$router.push({ name: 'singerDetail', params: { id: sid } })
+    this.closeMainPlayer()
   }
   closeMainPlayer() {
     this.$emit('close')
@@ -291,6 +320,28 @@ export default class App extends Vue {
     }
     .cd
       z-index 1
+      display flex
+      flex-direction column
+      .ctrl-group
+        display flex
+        justify-content space-around
+        align-items center
+        margin-top 1rem
+        .wrap
+          width 2rem
+          height 2rem
+          border-radius 50%
+          border 1px solid rgba(150,150,150,.5)
+          display flex
+          align-items center
+          justify-content center
+          background #ddd
+          cursor pointer
+        img
+          width 1.3rem
+        .icon
+          font-size .8rem
+          color #999999
     .lyric
       // margin-left 1rem
       @media (max-width 750px) {
@@ -324,6 +375,9 @@ export default class App extends Vue {
         text-overflow ellipsis
         overflow hidden
         white-space nowrap
+        width 50%
+        text-align left
+        flex-grow 10
         .text
           cursor pointer
           color $color-font-link-blue

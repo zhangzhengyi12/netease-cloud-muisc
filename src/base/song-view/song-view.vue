@@ -2,19 +2,19 @@
 <div class="song-view" @click="$emit('click',index)"  :class="{simple:isSimple,'high-light':highLight}">
   <div class="header">
     <span class="p-icon" v-if="isSimple"></span>
-    <span class="index" v-if="!isSimple">{{ (index +1 < 10) ? `0${index + 1}` : index +1}}</span>
-    <i class="i_not_collection collect" v-if="!isSimple"></i>
+    <span class="index" v-if="!isSimple&&!simpleHeader">{{ (index +1 < 10) ? `0${index + 1}` : index +1}}</span>
+    <i class="i_not_collection collect" v-if="!isSimple&&!simpleHeader"></i>
     <span class="name">
       {{ track.name }}
-      <span class="alias" v-if="track.alias[0]">({{track.alias[0]}})</span>
+      <span class="alias" v-if="track.alias&&track.alias[0]">({{track.alias[0]}})</span>
       </span>
     <i class="i_video mv" v-if="track.mvid !== 0 && !isSimple"></i>
   </div>
   <div class="body">
-    <span class="artists">{{caluArtists(track.artists)}}</span>
+    <artists class="artists" @select="selectSinger" :artists="track.artists" artCls="art" />
   </div>
   <div class="tail">
-    <span class="album" v-if="!isSimple">{{track.album.name}}</span>
+    <span class="album" v-if="!isSimple" @click.stop="$emit('selectAlbum',track.album.id)">{{track.album.name}}</span>
     <div class="tail-bar">
     <span class="time">{{caluTime(track.duration)}}</span>
     <span class="sq" v-if="track.fee">
@@ -31,6 +31,7 @@ import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 import { timeAndArtisitMixin } from '@/mixins/mixins'
 import ClickAnima from 'base/click-anima/click-anima.vue'
+import Artists from 'base/artists/artists.vue'
 interface art {
   name: string
   id: number
@@ -51,7 +52,8 @@ interface track {
   name: 'songView',
   mixins: [timeAndArtisitMixin],
   components: {
-    ClickAnima
+    ClickAnima,
+    Artists
   }
 })
 export default class App extends Vue {
@@ -59,6 +61,7 @@ export default class App extends Vue {
   @Prop() index: number
   @Prop() type: number
   @Prop() highLight: boolean
+  @Prop() simpleHeader: boolean
   isSimple: boolean = false
   isHight: boolean = false
   mounted() {
@@ -66,6 +69,10 @@ export default class App extends Vue {
       // 精简版
       this.isSimple = true
     }
+  }
+  selectSinger(index: number) {
+    let id = this.track.artists[index].id
+    this.$emit('selectSinger', id)
   }
 }
 </script>
@@ -148,8 +155,9 @@ export default class App extends Vue {
       padding .1rem 0
       font-size .68rem
       color $color-font-grey-artisit
-      &:hover
-        color $color-font-grey-title
+      .art
+        &:hover
+          color $color-font-grey-title
   .tail
     width 40%
     display flex 

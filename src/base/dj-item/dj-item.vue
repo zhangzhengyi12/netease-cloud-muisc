@@ -1,6 +1,6 @@
 <template>
 
-<div class="dj">
+<div class="dj" @click="$emit('click')">
   <img :src="this.data.picUrl" :alt="this.data.name"/>
   <div class="content">
     <span class="name">{{this.data.name}}</span>

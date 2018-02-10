@@ -8,10 +8,11 @@ interface cacheObj {
   get: <t>(def: t, key: string) => any | t
 }
 
-
 export const cache: cacheObj = {
   set<t>(val: t, key: string): t {
-    lscache.set(key + LC_KEY, val)
+    setTimeout(() => {
+      lscache.set(key + LC_KEY, val)
+    }, 5000)
     return val
   },
   get<t>(def: t, key: string): any {

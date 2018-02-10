@@ -32,4 +32,9 @@ const getPersonalizedDjprogram = function() {
   return request({ target }, false)
 }
 
-export { getBanner, getPersonalizedSonglist, getPrivateContent, getPersonalizedNewsong, getPersonalizedMvs, getPersonalizedDjprogram }
+const getRecommendSongs = function() {
+  const target = '/recommend/songs'
+  return request({ target }, true)
+}
+
+export { getRecommendSongs, getBanner, getPersonalizedSonglist, getPrivateContent, getPersonalizedNewsong, getPersonalizedMvs, getPersonalizedDjprogram }

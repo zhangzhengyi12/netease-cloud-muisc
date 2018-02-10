@@ -142,7 +142,6 @@ export default class App extends Vue {
     this.getHighqualityPlaylistData(this.tag, cLength + DEF_LIMIT)
   }
   selectPlaylist(index: number) {
-    // console.log(playlist)
     const id: string = (this.sequenceList as Array<{ id: number }>)[index].id.toString()
     this.$router.push({ name: 'songlistDetail', params: { id } })
   }

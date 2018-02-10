@@ -36,17 +36,19 @@
       </ul>
         <v-bar class="views">
           <!-- step1 hot50 -->
-          <song-list-view v-show="activeView === 0" :tracks="hotSongs"></song-list-view>
-          <div class="cdView" v-show="activeView ===1">
-            <music-item
+          <transition name="fade" mode="out-in">
+          <song-list-view class="songsView" v-if="activeView === 0" :tracks="hotSongs" key="songs"></song-list-view>
+          <div class="cdView" v-if="activeView ===1" key="album">
+            <v-music-item
             v-for="(album,index) of albums"
             :key="index"
             :data="album"
             :index='index'
             class="album"
+            @click="selectAlbum(album)"
             />
           </div>
-          <div class="desView" v-show="activeView === 2">
+          <div class="desView" v-if="activeView === 2" key="des">
             <h1 class="title">{{singer.name}}简介</h1>
             <p class="text">&nbsp;&nbsp;&nbsp;&nbsp;{{singerDesc}}</p>
             <div class="intr" v-for="(item,index) of singerIntroduction"
@@ -55,15 +57,17 @@
               <p class="text">&nbsp;&nbsp;&nbsp;&nbsp;{{item.txt}}</p>
             </div>
           </div>
-          <div class="simiView" v-show="activeView === 3">
+          <div class="simiView" v-if="activeView === 3" key="simi">
             <music-item
               v-for="(singer,index) of simiSinger"
               :key="index"
               :data="simiArtistsDataToMusicItemAdapter(singer)"
               :index='index'
               class="singer"
+              @click="selectSimiSinger(singer)"
             />
           </div>
+          </transition>
         </v-bar>
     </div>
   </div>
@@ -74,8 +78,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { loadingMixin, musicItemMixin } from '@/mixins/mixins.ts'
 import { getSingerDetail, getSingerAlbums, getSingerDesc, getSimiSinger } from 'api/singer.ts'
-import MusicItem from 'base/music-item/music-item.vue'
-import { Prop } from 'vue-property-decorator'
+import VMusicItem from 'base/1v1-music-item/1v1-music-item.vue'
+import { Prop, Watch } from 'vue-property-decorator'
 import { initSingerDetailViews } from 'common/js/initData'
 import SongListView from 'components/song-list-view/song-list-view.vue'
 import VBar from 'v-bar'
@@ -85,7 +89,7 @@ const DEF_ALBUM_LIMIT = 50
 @Component({
   name: 'singerDetail',
   mixins: [loadingMixin, musicItemMixin],
-  components: { VBar, SongListView, MusicItem }
+  components: { VBar, SongListView, VMusicItem }
 })
 export default class App extends Vue {
   @Prop() id: number
@@ -112,7 +116,9 @@ export default class App extends Vue {
           this.hotSongs = this.hotSongDataToSongListViewAdapter(res.body.hotSongs)
         }
         this.showLoading = false
-        this.afterUpdateReset(res.body.artist.picUrl)
+        if (res) {
+          this.afterUpdateReset(res.body.artist.picUrl)
+        }
       },
       (err: any) => {}
     )
@@ -143,7 +149,7 @@ export default class App extends Vue {
         }
       },
       (err: any) => {
-        console.log(err)
+        this.$message('获取歌手专辑错误')
       }
     )
   }
@@ -157,15 +163,40 @@ export default class App extends Vue {
   }
   getSimiSingerData(id: number) {
     getSimiSinger(id).then((res: any) => {
-      console.log(res)
       if (res.body.code === 200) {
         this.simiSinger = res.body.artists
       }
     })
   }
-  simiArtistsDataToMusicItemAdapter(item:any){
+  simiArtistsDataToMusicItemAdapter(item: any) {
     item.picUrl = item.img1v1Url
     return item
+  }
+  selectAlbum(a: any) {
+    this.$router.push({ name: 'albumDetail', params: { id: a.id } })
+  }
+  selectSimiSinger(s: any) {
+    this.$router.push({ name: 'singerDetail', params: { id: s.id } })
+  }
+  reInitData() {
+    this.initViews = initSingerDetailViews
+    this.activeView = 0
+    this.singer = null
+    this.hotSongs = []
+    this.albums = []
+    this.showLoading = true
+    ;(this.$refs.b as HTMLElement).style.backgroundImage = `url()`
+  }
+  @Watch('id')
+  onIdChange(nId: number, oId: number) {
+    if (!nId) return
+    if (nId !== oId) {
+      this.getSingerDetailData(nId)
+      this.getSingerAlbumsData(nId, DEF_ALBUM_LIMIT)
+      this.getSingerDescData(nId)
+      this.getSimiSingerData(nId)
+      this.reInitData()
+    }
   }
 }
 </script>
@@ -246,7 +277,11 @@ export default class App extends Vue {
     .cdView
       display flex
       flex-wrap wrap
+      padding-right 1rem
       padding-bottom 2rem
+      position: relative
+      padding-right: 24px !important
+      padding-bottom: 24px !important
       .album
         width 20%
         @media (max-width 800px) {
@@ -261,10 +296,18 @@ export default class App extends Vue {
         @media (min-width 1700px) {
           width 10%
         }
+    .songsView
+      position: relative
+      padding-right: 24px !important
+      padding-bottom: 24px !important
     .simiView
       display flex
       flex-wrap wrap
+      padding-right 1rem
       padding-bottom 2rem
+      position: relative
+      padding-right: 24px !important
+      padding-bottom: 24px !important
       .singer
         width 20%
         @media (max-width 800px) {
@@ -282,6 +325,10 @@ export default class App extends Vue {
     .desView
       text-align left
       color #333
+      padding-right 1rem
+      position: relative
+      padding-right: 24px !important
+      padding-bottom: 24px !important
       .title
         margin 1rem 0
       .text
@@ -310,4 +357,16 @@ export default class App extends Vue {
       &.active
         color $color-font-red
         border-bottom 2px solid $color-font-red
+
+.fade-leave-to
+  opacity 0
+  transform translateX(-80px)
+.fade-enter
+  opacity 0
+  transform translateX(80px)
+.fade-enter-active
+  transition all .5s
+.fade-leave-active
+  transition all .3s
+
 </style>

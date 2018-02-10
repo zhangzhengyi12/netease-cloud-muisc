@@ -17,7 +17,7 @@
           <span class="date">{{transTime}} 创建</span>
         </div>
         <div class="button-group">
-        <my-button :text="`评论(${songlistData.commentCount})`" iconCls="i_sound"></my-button>
+        <my-button :text="`评论(${songlistData.commentCount})`" @click="toggleCommentDetail" iconCls="i_sound"></my-button>
         </div>
       </div>
     </div>
@@ -55,20 +55,20 @@ const CODE_OK = 200
 export default class App extends Vue {
   @Prop() id: number
   tryGetData: boolean = true
-  songlistData: null | {
-    createTime: number
-  } = null
+  songlistData: any = null
   tryGetEventId: number = 0
   mounted() {
     this.getSonglistDetailData(this.id)
     // 为歌单详情组件撑起一个高度
-    ;this.beforeUpdateInit()
-  }
-  @Watch('$route')
-  onchangeRoute() {
-    this.getSonglistDetailData(this.id)
-    // 暂时取消掉detail组件的高度
     this.beforeUpdateInit()
+  }
+  @Watch('id')
+  onchangeRoute(nId: number, oId: number) {
+    if (nId !== oId) {
+      this.getSonglistDetailData(this.id)
+      // 暂时取消掉detail组件的高度
+      this.beforeUpdateInit()
+    }
   }
   getSonglistDetailData(id: number) {
     const currid = Math.random()
@@ -94,6 +94,24 @@ export default class App extends Vue {
       picUrl: item.coverImgUrl,
       playCount: item.playCount
     }
+  }
+  toggleCommentDetail() {
+    let id = this.songlistData.id,
+      type = '0',
+      blurPic = this.songlistData.coverImgUrl,
+      fTitle = this.songlistData.name,
+      tTitle = `by ${this.songlistData.creator.nickname}`,
+      params = {
+        id,
+        type,
+        blurPic,
+        fTitle,
+        tTitle
+      }
+    this.$router.push({
+      name: 'commentDetail',
+      params
+    })
   }
   get transTime(): string | undefined {
     if (this.songlistData) {

@@ -1,5 +1,5 @@
 <template>
-  <span class="button">
+  <span class="button" @click="$emit('click')">
     <i :class="iconCls"></i>
     <span class="text">{{text}}</span>
   </span>
@@ -22,14 +22,18 @@ export default class App extends Vue {
 
 .button
   padding .3rem .5rem
-  border 1px solid rgb(190,190,190)
+  border 1px solid rgb(160,160,160)
   background-color rgba(240,240,240,.5)
   display flex
   align-items center
   cursor pointer
+  color #333
+  &:hover
+    color #000
   i
     font-size .8rem
     margin-right .3rem
+    color #666
   .text
     font-size .6rem
 

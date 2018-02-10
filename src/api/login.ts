@@ -12,4 +12,11 @@ const zhijie = function() {
   return request({ target, query }, true)
 }
 
-export { zhijie, userLogin }
+const signIn = function() {
+  const target = '/daily_signin'
+  const query = {
+    timestamp: Date.now()
+  }
+  return request({ target, query }, true)
+}
+export { zhijie, userLogin, signIn }

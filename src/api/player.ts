@@ -54,4 +54,29 @@ const getDjComment = function(sid: number, limit: number, offset?: number) {
   return request({ target, query }, false)
 }
 
-export { addCollectToPlayList, getLyric, getSimiSong, getSongComment, getSongUrl,getDjComment }
+const getRecFm = function() {
+  const target = '/personal_fm'
+  const query = {
+    timestamp: Date.now()
+  }
+  return request({ target, query }, true)
+}
+
+const like = function(id: number, liked: boolean) {
+  const target = '/like'
+  const query = {
+    id,
+    like: liked
+  }
+  return request({ target, query }, true)
+}
+
+const fmTrash = function(id: number) {
+  const target = '/fm_trash'
+  const query = {
+    id
+  }
+  return request({ target, query }, true)
+}
+
+export { addCollectToPlayList, fmTrash, like, getLyric, getSimiSong, getSongComment, getSongUrl, getDjComment, getRecFm }

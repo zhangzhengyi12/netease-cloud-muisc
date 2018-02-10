@@ -10,7 +10,7 @@ interface playData {
   sequenceList: Array<any>
   mode: number
   currentIndex: number
-  isRadio:boolean
+  isRadio: boolean
 }
 interface state {
   userLoginState: {
@@ -35,5 +35,7 @@ const playData = Object.assign(cache.get(initPlayData, 'playData'), { playing: f
 export default {
   userLoginState: cache.get(defaultLogin, 'LOGIN'),
   viewport: { width: document.body.clientWidth, height: window.innerHeight },
-  playData
+  playData,
+  searchHistory: cache.get([], 'searchHistory'),
+  playHistory: cache.get([], 'playHistory')
 }

@@ -77,17 +77,18 @@ export default class App extends Vue {
   @Watch('playing')
   onPlayChange(nP: boolean) {
     if (nP) {
-      this.currentLyric && this.currentLyric.togglePlay()
+      this.currentLyric.togglePlay && this.currentLyric.togglePlay()
     } else {
-      this.currentLyric && this.currentLyric.stop()
+      this.currentLyric.stop && this.currentLyric.stop()
     }
   }
   @Watch('id')
   onIDchange(id: number) {
-    this.currentLyric && this.currentLyric.stop()
+    this.currentLyric.stop && this.currentLyric.stop()
     this.currentLyric = {}
     this.currentTLyric = {}
     this.getLyricData()
+    ;(this.$refs.bar as { scrollTo: (x: number, y: number) => void }).scrollTo(0, 0)
   }
 }
 </script>

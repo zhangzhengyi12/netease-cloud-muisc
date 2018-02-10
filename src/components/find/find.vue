@@ -2,22 +2,17 @@
   <div class="find">
     <h3 class="title">发现音乐</h3>
     <ul class="link-group">
-      <li class="link"
-      v-for="(link,index) of baseMenuData" 
-      :key="index"
-      @click="toggleRouter(link.componentName,index)"
-      :class="{active: activeId === index}"
-      >{{ link.title }}</li>
+      <li class="link" v-for="(link,index) of baseMenuData" :key="index" @click="toggleRouter(link.componentName,index)" :class="{active: activeId === index}">{{ link.title }}</li>
       <!-- border 为了重叠 破坏一下结构   -->
       <div class="border"></div>
     </ul>
-       <v-bar id="view" ref='vbar' autoHide="3000">
-        <transition name='view-fade'>
-    <keep-alive>
-    <router-view></router-view>
-    </keep-alive>
-        </transition>
-        </v-bar>
+    <v-bar id="view" ref='vbar' autoHide="3000">
+      <transition name='fade' mode="out-in">
+        <keep-alive>
+          <router-view class="content"></router-view>
+        </keep-alive>
+      </transition>
+    </v-bar>
 
   </div>
 </template>
@@ -26,6 +21,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { routers } from 'common/js/initData'
+import { Watch } from 'vue-property-decorator'
 import VBar from 'v-bar'
 
 interface Vbar extends Vue {
@@ -59,6 +55,13 @@ export default class App extends Vue {
         this.activeId = index
       }
     })
+  }
+  @Watch('$route')
+  onRouteChange(route: any) {
+    let index = this.baseMenuData.findIndex((item: any) => {
+      return item.componentName === route.name
+    })
+    this.activeId = index
   }
 }
 </script>
@@ -95,9 +98,18 @@ export default class App extends Vue {
         border-bottom 2px solid $color-font-red
 #view
   viewStyle()
-
-.view-fade-enter,.view-fade-leave-to
+  .content
+    position relative
+    padding-right 24px !important
+    padding-bottom 24px !important
+.fade-leave-to
   opacity 0
-.view-fade-enter-active,.view-fade-leave-active
-  transition opacity .5s
+  transform translateX(-80px)
+.fade-enter
+  opacity 0
+  transform translateX(80px)
+.fade-enter-active
+  transition all 0.5s
+.fade-leave-active
+  transition all 0.3s
 </style>

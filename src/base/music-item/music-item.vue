@@ -2,7 +2,9 @@
   <div class="songlist" @click="$emit('click')">
       <div class="content">
         <div class="count" v-if="this.data.playCount"><i :class="[this.countIcon ? this.countIcon : 'i_music_40']" style="margin-right:3px;"></i>{{ caluCount }}</div>
-        <img v-lazy="this.data.picUrl" :alt="this.data.name" ref="img"/>
+
+  <img v-lazy="this.data.picUrl" :alt="this.data.name" ref="img"/>
+         
         <span class="name" v-if="this.data.name">{{this.data.name}}</span>
         <span class="avatar" v-if="this.data.artistName">{{ this.data.artistName }}</span>
       </div>
@@ -63,9 +65,13 @@ export default class App extends Vue {
     flex-direction column
     overflow hidden
     width 88%
+    align-items cen
     margin 0 auto
     text-align left 
     position relative
+    .wrapper
+      height 100%
+      commonBorder()
     .name
       font-size .8rem
       display inline-block
@@ -82,5 +88,4 @@ export default class App extends Vue {
       color $color-font-grey-title
     img
       max-width 100%
-      commonBorder()
 </style>

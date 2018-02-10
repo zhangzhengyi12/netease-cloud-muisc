@@ -1,6 +1,6 @@
 <template>
 
-  <div class="bar" :class="{mini:isMini}">
+  <div class="bar" :class="{mini:isMini}" ref="bar">
 
     <span class="toggle-bar" @click="toggleBar">
       <option-item :iconCls="'i_menu'"></option-item>
@@ -8,12 +8,12 @@
 
     <v-bar class="wrapper" :class="{mini:isMini}" :autoHide="3000">
       <div id="content">
-        <div v-for="(list,index) in publicList" :key="index" class="list base-list">
+        <div v-for="(list,index) in optionList" :key="index" class="list base-list">
           <h5 v-show="list.title&&!isMini" class="title">{{ list.title }}</h5>
           <ul v-show="!list.title || !isMini">
             <!-- 在mini模式下 二级列表的检查将不会通过 所以不会展示 -->
             <li v-for="(item,index) of list.list" :key="index">
-              <option-item :nameZh="item.name_zh" :name="item.name"  :id="item.id" :iconCls="item.iconCls" :isActive="currActive(item.id)" :isMini="isMini" @click="onSelectItem"></option-item>
+              <option-item :nameZh="item.name_zh" :name="item.name" :id="item.id" :iconCls="item.iconCls" :isActive="currActive(item.id)" :isMini="isMini" @click="onSelectItem"></option-item>
             </li>
           </ul>
         </div>
@@ -25,12 +25,12 @@
 
         <!-- 歌单的渲染 ，未登录则放弃渲染 -->
 
-        <div class="play-list" v-show="userPlaylist && !isMini">
+        <div class="play-list" v-show="userPlaylist && !isMini && loginState.isLogin">
           <div v-for="(group,index) of userPlaylist" :key="index">
             <h5 class="title">{{group.title}}</h5>
             <ul>
               <li v-for="(item,index) of  group.list" :key="index">
-                <option-item :nameZh="item.name" :id="item.id" :iconCls="'i_music_18'" :isActive="currActive(item.id)" :isMini="isMini" @click="onSelectItem"></option-item>
+                <option-item :nameZh="item.name" :id="item.id" :iconCls="'i_music_32'" :isActive="currActive(item.id)" :isMini="isMini" @click="onSelectItem"></option-item>
               </li>
             </ul>
           </div>
@@ -38,9 +38,9 @@
       </div>
 
     </v-bar>
-    <div class="user" :class="{mini:isMini}">
+    <div class="user" :class="{mini:isMini}" @click.stop="$emit('openMenu')">
       <span class="avatar">
-        <img :src="[loginState.isLogin ? loginState.userState.profile.avatarUrl : '']" alt="">
+        <img :src="[loginState.isLogin ? loginState.userState.profile.avatarUrl : IMG_DEF_AVATAR]" alt="">
       </span>
       <span class="user-name" v-show="!isMini">{{ loginState.isLogin ? loginState.userState.profile.nickname : '未登陆'}}</span>
       <i class="i_mail icon"></i>
@@ -53,7 +53,7 @@
 import Vue from 'vue'
 import VBar from 'v-bar'
 import Component from 'vue-class-component'
-import { InitOptions } from 'common/js/initData'
+import { InitOptionsLogined, InitOptionsNoLogin } from 'common/js/initData'
 import OptionItem from 'base/Option/Option.vue'
 import { State } from 'vuex-class'
 import { getUserPlaylist } from 'api/option-bar'
@@ -75,11 +75,10 @@ const BASE_ID_LIMIT: number = 100
 export default class App extends Vue {
   isMini: boolean = false
   activeID: number = 1
-  publicList = InitOptions
   userPlaylist: any = null
   @State('userLoginState') loginState: any
   @State('viewport') viewport: any
-
+  IMG_DEF_AVATAR = require('@/assets/def-avatar.jpg')
   mounted() {
     this.checkRoute()
     this.checkNeedMini()
@@ -88,11 +87,18 @@ export default class App extends Vue {
       this.getPlaylist()
     }
   }
-
+  get optionList() {
+    if (this.loginState.isLogin) {
+      return InitOptionsLogined
+    } else {
+      return InitOptionsNoLogin
+    }
+  }
   toggleBar(e: any): void {
     // 根据不同IDType 来调动路由进行页面组件的展示
     this.isMini = !this.isMini
   }
+
   checkRoute() {
     if (this.$route.params) {
       // 如果当前路由为歌单组件
@@ -133,15 +139,26 @@ export default class App extends Vue {
     )
   }
   checkNeedMini() {
+    // 已经是mini模式，无需更改
+    if (this.isMini) return
     if (this.viewport.width < MINI_WIDTH) {
       this.isMini = true
-    } else {
-      this.isMini = false
     }
   }
   @Watch('viewport')
   onViewPortChange(val: any) {
     this.checkNeedMini()
+  }
+  @Watch('route')
+  onRouteChange() {
+    this.checkRoute()
+  }
+  @Watch('loginState')
+  onLoginChange(n: any) {
+    if (n.isLogin) {
+      this.getPlaylist()
+    } else {
+    }
   }
 }
 </script>
@@ -186,6 +203,7 @@ export default class App extends Vue {
     margin-top 1rem
 .user
   position absolute
+  cursor pointer
   height 3.3rem
   width 100%
   border-right 1px solid #ccc

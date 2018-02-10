@@ -9,9 +9,19 @@ import 'common/css/index.styl'
 import 'element-ui/lib/theme-chalk/index.css'
 import vueLazyLoad from 'vue-lazyload'
 import { prototype } from 'events'
+import * as OfflinePluginRuntime from 'offline-plugin/runtime'
+
+OfflinePluginRuntime.install()
 
 Vue.use(vueLazyLoad, {
-  loading: require('./assets/logo.png')
+  loading: require('./assets/logo.png'),
+  observer: true,
+  lazyComponent: true,
+  // optional
+  observerOptions: {
+    rootMargin: '0px',
+    threshold: 0.1
+  }
 })
 
 Vue.use(ElementUI)
@@ -25,8 +35,6 @@ new Vue({
   components: { App },
   store
 })
-
-
 
 Date.prototype.Format = function(this: Date, fmt: string) {
   var o: {

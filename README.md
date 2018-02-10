@@ -165,3 +165,49 @@ flex有个玩法是给固定的宽度，但是让他grow， 这个宽度最后�
 ## 注意 如果在Vue组件里对DOM强依赖，比如在组件mounted的时候利用Nexttick来获取某个DOM的宽度，就必须使用if条件渲染，如果使用v-show。在执行生命周期的时候这个组件根本还没有被加载到DOM中。
 
 修复了很多歌词模块的BUG 开发近似歌曲模块
+
+
+在歌单/歌手/专辑详情页面我放弃了用一个mask背景覆盖然后展示Loading动画的想法，通过这个肯定可以一定程度上的提高性能，但为了提升可能不到.1秒的速度，我需要在每个详情组件内部去实现mask，我觉得这违背了单一行为的原则，让本来的组件变得更加的混乱。还是使用当ID更改的时候，重初始化数据，虽然会丢失原有的一些DOM借点，会重新渲染，但感觉还不错
+
+
+TODO: 为了让这个APP更加好用，我需要在后续在增加很多的边界处理，比如当获取不到数据的时候就提醒并返回上一级。
+
+缓存对于时间根本没要求，让他timeout五秒再真正的写入，这样可以极大的提升性能
+
+```js
+
+function isSameArrayAttr(attr: string, arr1: Array<any>, arr2: Array<any>) {
+  const al = arr1.length
+  const bl = arr2.length
+  const target = al > 50 ? Math.floor(al / 10) : al
+  if (al !== bl) return false
+  // 抽查
+  for (let i = 0; i < target; i++) {
+    let index = Math.floor(Math.random() * al)
+    if (arr1[index][attr] !== arr2[index][attr]) {
+      return false
+    }
+  }
+  return true
+}
+
+```
+
+必须在更改播放列表前检查是否相同，如果相同只需要改变一下Indexx就可以了，但是比较的方法用tostring不好太慢了。用这个能降低到几乎很低很低
+
+
+搜索页面的动态性非常的高，我对每一个子组件都使用了一个状态机，通过对应不同的状态来进行一些比如loading,没有结果的提示，等等
+否则管理起来其实会比较的复杂
+```js
+
+const resultState = {
+  wait: 1,
+  init: 0,
+  noResult: 2,
+  hasResult: 3
+}
+
+```
+
+
+要避免使用一些非常奇怪的技巧，比如在windows上加上点击事件来保证点击除了某个组件以外的部分都会让这个组件关闭，这有可能会导致点击一些其他的交互而导致这个组件过于快的被关闭，一些事件可能无法被处罚，更好的选择是利用mask来进行遮罩

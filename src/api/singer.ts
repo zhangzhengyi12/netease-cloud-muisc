@@ -47,12 +47,10 @@ const getArtists = function() {
             //加入热门
             result['热门'] = { cate: '热门', list: hotTmp }
             lscache.set(LC_KEY + target, result)
-            console.log(result)
             resolve(result)
           }
         },
         (err: any) => {
-          console.log(err)
         }
       )
     }

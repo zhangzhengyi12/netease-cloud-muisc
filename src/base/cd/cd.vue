@@ -43,6 +43,7 @@ export default class App extends Vue{
         left 50%
         margin-left -80px
         width 160px
+        height 160px
         border-radius 50%
 
 @keyframes rotate {
