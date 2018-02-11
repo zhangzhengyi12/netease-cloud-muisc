@@ -384,7 +384,7 @@ export default class App extends Vue {
   @Watch('currentSong')
   onCurrengSongChange(newS: any, oS: any) {
     // 用户刚清空播放列表 || 用户在FM模式，避免修改播放列表导致的重设initBug
-    if (!newS || (newS.id === oS.id && this.isRec)) return
+    if (!newS || (oS && newS.id === oS.id && this.isRec)) return
     if (!newS.id) {
       this.toggleNext()
     }
