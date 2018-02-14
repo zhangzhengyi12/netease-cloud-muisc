@@ -4,9 +4,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router/index.ts'
 import store from './store/index.ts'
-import ElementUI from 'element-ui'
+import { Carousel, CarouselItem, Message,  MessageBox} from 'element-ui'
 import 'common/css/index.styl'
-import 'element-ui/lib/theme-chalk/index.css'
 import vueLazyLoad from 'vue-lazyload'
 import { prototype } from 'events'
 import * as OfflinePluginRuntime from 'offline-plugin/runtime'
@@ -24,7 +23,10 @@ Vue.use(vueLazyLoad, {
   }
 })
 
-Vue.use(ElementUI)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
+
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -54,3 +56,6 @@ Date.prototype.Format = function(this: Date, fmt: string) {
       fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length))
   return fmt
 }
+
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message
