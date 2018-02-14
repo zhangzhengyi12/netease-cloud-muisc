@@ -43,7 +43,11 @@ interface optionsGroup {
   list: optionsList
 }
 
-const InitOptionsNoLogin: optionsGroup[] = [
+interface options {
+  [prop:number]:optionsGroup
+}
+
+const InitOptionsNoLogin: options = [
   {
     title: null,
     list: [
@@ -74,7 +78,7 @@ const InitOptionsNoLogin: optionsGroup[] = [
   }
 ]
 
-const InitOptionsLogined: optionsGroup[] = [
+const InitOptionsLogined: options = [
   {
     title: null,
     list: [
@@ -89,18 +93,6 @@ const InitOptionsLogined: optionsGroup[] = [
         iconCls: 'i_music_40',
         name_zh: '发现音乐',
         id: 1
-      },
-      {
-        name: 'mv',
-        iconCls: 'i_video',
-        id: 2,
-        name_zh: 'MV'
-      },
-      {
-        name: 'friend',
-        iconCls: 'i_friend',
-        id: 3,
-        name_zh: '朋友'
       }
     ]
   },
@@ -108,7 +100,7 @@ const InitOptionsLogined: optionsGroup[] = [
     title: '我的音乐',
     list: [
       {
-        name: 'lastplay',
+        name: 'lastPlay',
         iconCls: 'i_time',
         id: 4,
         name_zh: '最近播放'

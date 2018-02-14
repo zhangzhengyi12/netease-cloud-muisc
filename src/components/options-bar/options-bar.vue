@@ -87,7 +87,7 @@ export default class App extends Vue {
       this.getPlaylist()
     }
   }
-  get optionList() {
+  get optionList(): any {
     if (this.loginState.isLogin) {
       return InitOptionsLogined
     } else {
@@ -100,10 +100,19 @@ export default class App extends Vue {
   }
 
   checkRoute() {
-    if (this.$route.params) {
+    if (this.$route.params.id) {
       // 如果当前路由为歌单组件
       let id: any = Number(this.$route.params.id)
       this.activeID = id
+    } else {
+      // 检查是否为基本组件
+      for (let group of this.optionList) {
+        for (let i of group.list) {
+          if (this.$route.name == i.name) {
+            this.activeID = i.id
+          }
+        }
+      }
     }
   }
   onSelectItem(item: { name: string; id: number }) {
