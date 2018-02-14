@@ -1,20 +1,21 @@
 CACHE MANIFEST
-#ver:2018-2-15 00:55:25
+#ver:2018-2-15 01:19:24
 #plugin:4.9.0
 
 CACHE:
-./static/img/sfont.a048353.svg
+./static/img/sfont.0e2c7fc.svg
 ./static/fonts/sfont.6804366.eot
 ./static/fonts/sfont.277fe19.ttf
 ./static/fonts/sfont.469fa0f.woff
+./static/fonts/element-icons.6f0a763.ttf
 ./static/img/banner-placeholder.f9e1d13.png
 ./static/img/logo.17a0dde.png
 ./static/img/cd.ec16676.svg
 ./static/img/def-avatar.d1644ea.jpg
-./static/js/vendor.c9fba6d50126cc8f89cc.js
-./static/js/app.92140a8264f9f3bb6c83.js
-./static/js/manifest.ec7d4d45e90961a72faf.js
-./static/css/app.ec9a530d80e80c8e081f6acb3e124d46.css
+./static/js/vendor.baeb2887f3154c4e54a4.js
+./static/js/app.68b83ed4da39c1486428.js
+./static/js/manifest.57b9943bcba1a0f9223e.js
+./static/css/app.1f758eb6522cc6fb690f5b590c8e61cf.css
 
 NETWORK:
 *

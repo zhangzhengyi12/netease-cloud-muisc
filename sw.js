@@ -11,8 +11,8 @@ var __wpo = {
       "./static/img/cd.ec16676.svg",
       "./static/img/def-avatar.d1644ea.jpg",
       "./static/js/vendor.baeb2887f3154c4e54a4.js",
-      "./static/js/app.68b83ed4da39c1486428.js",
-      "./static/js/manifest.57b9943bcba1a0f9223e.js",
+      "./static/js/app.1069ad91c2fe40142689.js",
+      "./static/js/manifest.43c971afcb1d65372242.js",
       "./static/css/app.1f758eb6522cc6fb690f5b590c8e61cf.css"
     ],
     "additional": [],
@@ -30,13 +30,13 @@ var __wpo = {
     "7e85fe4c40d79864a49851c5c2037979d88e239f": "./static/img/cd.ec16676.svg",
     "10dd5aac91a121759ed1174f744bba36f04c15c6": "./static/img/def-avatar.d1644ea.jpg",
     "5f44cd32090a1659400b4625079d805d46f2ce7f": "./static/js/vendor.baeb2887f3154c4e54a4.js",
-    "699f59556b3b3e0f1c1a6b2cc6890d882d1b502a": "./static/js/app.68b83ed4da39c1486428.js",
-    "2adc2b855e72b36eaa289cdd00e98bd7e7987edc": "./static/js/manifest.57b9943bcba1a0f9223e.js",
+    "ffb1272a0ef96c9b4e2fd73b21fbf28e046f829b": "./static/js/app.1069ad91c2fe40142689.js",
+    "a548d3152b96f3806fed9cbf5d1a295bac38c6fe": "./static/js/manifest.43c971afcb1d65372242.js",
     "2d891ee4df022be10cc7150aa90c5d0df600c50f": "./static/css/app.1f758eb6522cc6fb690f5b590c8e61cf.css"
   },
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "2018-2-15 01:19:24",
+  "version": "2018-2-15 01:29:08",
   "name": "webpack-offline",
   "pluginVersion": "4.9.0",
   "relativePaths": false
