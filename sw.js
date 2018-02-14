@@ -1,40 +1,42 @@
 var __wpo = {
   "assets": {
     "main": [
-      "./static/img/sfont.a048353.svg",
+      "./static/img/sfont.0e2c7fc.svg",
       "./static/fonts/sfont.6804366.eot",
       "./static/fonts/sfont.277fe19.ttf",
       "./static/fonts/sfont.469fa0f.woff",
+      "./static/fonts/element-icons.6f0a763.ttf",
       "./static/img/banner-placeholder.f9e1d13.png",
       "./static/img/logo.17a0dde.png",
       "./static/img/cd.ec16676.svg",
       "./static/img/def-avatar.d1644ea.jpg",
-      "./static/js/vendor.c9fba6d50126cc8f89cc.js",
-      "./static/js/app.92140a8264f9f3bb6c83.js",
-      "./static/js/manifest.ec7d4d45e90961a72faf.js",
-      "./static/css/app.ec9a530d80e80c8e081f6acb3e124d46.css"
+      "./static/js/vendor.baeb2887f3154c4e54a4.js",
+      "./static/js/app.68b83ed4da39c1486428.js",
+      "./static/js/manifest.57b9943bcba1a0f9223e.js",
+      "./static/css/app.1f758eb6522cc6fb690f5b590c8e61cf.css"
     ],
     "additional": [],
     "optional": []
   },
   "externals": [],
   "hashesMap": {
-    "214a05771bd659a9dbd2f92a114f7039f2a403b2": "./static/img/sfont.a048353.svg",
+    "313edbdf231620b2617e25551151ce23213619f3": "./static/img/sfont.0e2c7fc.svg",
     "6a36be3cdc348be8ce9a3c0779652ed8397aab45": "./static/fonts/sfont.6804366.eot",
     "b08627727757961999aca4a1d9b748c957149d38": "./static/fonts/sfont.277fe19.ttf",
     "8b8fcf7dafe9d0a88049577076ca55661313d11f": "./static/fonts/sfont.469fa0f.woff",
+    "edbe23fdf12089f825f3bdf4a3a8608b157a8040": "./static/fonts/element-icons.6f0a763.ttf",
     "2d0cea1f4e542ca91f199e2d5b19c0c296f387b3": "./static/img/banner-placeholder.f9e1d13.png",
     "1ff3dc4d5cc6279b635a8499c4c5c508b5983de2": "./static/img/logo.17a0dde.png",
     "7e85fe4c40d79864a49851c5c2037979d88e239f": "./static/img/cd.ec16676.svg",
     "10dd5aac91a121759ed1174f744bba36f04c15c6": "./static/img/def-avatar.d1644ea.jpg",
-    "10beb472c2469823ce34aa615cb5e07eeb1cdc49": "./static/js/vendor.c9fba6d50126cc8f89cc.js",
-    "7966d8bc5dec1b5ba9fe635ae10b82e6cf53f1f8": "./static/js/app.92140a8264f9f3bb6c83.js",
-    "c50d487533d0640401653083de0531cbd25bcdce": "./static/js/manifest.ec7d4d45e90961a72faf.js",
-    "d4c5f100a15270ece70239d3023e8d58132b410c": "./static/css/app.ec9a530d80e80c8e081f6acb3e124d46.css"
+    "5f44cd32090a1659400b4625079d805d46f2ce7f": "./static/js/vendor.baeb2887f3154c4e54a4.js",
+    "699f59556b3b3e0f1c1a6b2cc6890d882d1b502a": "./static/js/app.68b83ed4da39c1486428.js",
+    "2adc2b855e72b36eaa289cdd00e98bd7e7987edc": "./static/js/manifest.57b9943bcba1a0f9223e.js",
+    "2d891ee4df022be10cc7150aa90c5d0df600c50f": "./static/css/app.1f758eb6522cc6fb690f5b590c8e61cf.css"
   },
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "2018-2-15 00:55:25",
+  "version": "2018-2-15 01:19:24",
   "name": "webpack-offline",
   "pluginVersion": "4.9.0",
   "relativePaths": false
