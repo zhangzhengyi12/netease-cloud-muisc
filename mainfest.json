@@ -1,0 +1,23 @@
+{
+    "name": "网易云音乐",
+    "short_name": "网易云音乐",
+    "theme_color": "#bc2f2e",
+    "background_color": "#fafafa",
+    "display": "fullscreen",
+    "Scope": "./",
+    "start_url": "./",
+    "icons": [{
+        "src": "./netease-512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }, {
+        "src": "./netease-128.png",
+        "sizes": "128x128",
+        "type": "image/png"
+    }, {
+        "src": "./netease-256.png",
+        "sizes": "256x256",
+        "type": "image/png"
+    }],
+    "splash_pages": null
+}
