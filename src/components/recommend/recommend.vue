@@ -149,6 +149,7 @@ export default class App extends Vue {
     }
   }
   upCarouselHeight(index: number) {
+    if (!(this.$refs.imgs as Array<HTMLElement>)[index]) return
     let h = (this.$refs.imgs as Array<HTMLElement>)[index].scrollHeight
     ;((this.$refs.carousel as Vue).$el.firstChild as HTMLElement).style['height'] = `${h}px`
   }

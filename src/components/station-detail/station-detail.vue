@@ -65,6 +65,7 @@ export default class App extends Vue {
   mounted() {
     this.getDjDetailData()
     this.getDjProgramsData()
+    this.beforeUpdateInit()
   }
   getDjDetailData() {
     getDjDetail(this.id).then(
@@ -82,6 +83,10 @@ export default class App extends Vue {
   getDjProgramsData() {
     getDjPrograms(this.id).then((res: any) => {
       if (res.body.code === CODE_OK) {
+        if (res.body.programs.length === 0) {
+          this.$router.back()
+          this.$message('抱歉，无法获取电台数据')
+        }
         this.programs = res.body.programs
         this.progreamDataToPlayAdapter()
       }
@@ -99,6 +104,10 @@ export default class App extends Vue {
     ;(this.$refs.blur as HTMLElement).style.backgroundImage = `url(${url})`
     ;(this.$refs.detail as HTMLElement).style.height = ''
   }
+  beforeUpdateInit() {
+    this.tryGetData = true
+    ;(this.$refs.detail as HTMLElement).style.height = '81vh'
+  }
   togglePlay(index: number): void {
     this.setPlayType(true)
     this.selectPlay({ list: this.programs, index })
@@ -114,6 +123,7 @@ export default class App extends Vue {
   }
   @Watch('id')
   onIdChange() {
+    this.beforeUpdateInit()
     this.getDjDetailData()
     this.getDjProgramsData()
   }
@@ -132,6 +142,7 @@ export default class App extends Vue {
   background-color rgb(250, 250, 250)
   padding-top 1rem
   padding-bottom 3rem
+  height 100%
   .blur
     position absolute
     top 0
