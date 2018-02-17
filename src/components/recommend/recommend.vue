@@ -269,7 +269,6 @@ export default class App extends Vue {
 
   @Watch('viewport')
   onViewportChange() {
-    console.log('view')
     this.upCarouselHeight(0)
   }
   @Watch('$route')
