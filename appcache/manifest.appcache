@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#ver:2018-2-18 00:59:53
+#ver:2018-2-18 01:13:44
 #plugin:4.9.0
 
 CACHE:
@@ -13,9 +13,9 @@ CACHE:
 ./static/img/cd.ec16676.svg
 ./static/img/def-avatar.d1644ea.jpg
 ./static/js/vendor.e6bd755f9d0e47b2c626.js
-./static/js/app.8853e9c1db2dc0403d19.js
-./static/js/manifest.655021fbbaeaec394573.js
-./static/css/app.9ee9a6aec184d15575326f18dd8c8580.css
+./static/js/app.6468d9486ca854b70715.js
+./static/js/manifest.fe4c3770072c0e014432.js
+./static/css/app.25d86211d92d70232f7fa143cd3db866.css
 
 NETWORK:
 *
