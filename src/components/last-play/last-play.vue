@@ -1,12 +1,13 @@
 <template>
-  <div class="last-play">
+
+  <v-bar class="last-play" autoHide="3000">
     <div class="content">
       <div class="title">最近播放</div>
       <div class="last-view">
         <song-list-view :tracks="playHistory" :clear="true" @clear="clearPlayHistory" />
       </div>
     </div>
-  </div>
+  </v-bar>
 </template>
 
 <script lang='ts'>
@@ -14,9 +15,10 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Getter, Mutation } from 'vuex-class'
 import SongListView from 'components/song-list-view/song-list-view'
+import VBar from 'v-bar'
 @Component({
   name: 'lastPlay',
-  components: { SongListView }
+  components: { SongListView, VBar }
 })
 export default class App extends Vue {
   @Getter('playHistory') playHistory: any
@@ -40,6 +42,7 @@ export default class App extends Vue {
 <style lang='stylus' scoped>
 @import '~common/css/variable.styl'
 .last-play
+  height calc(100vh - 1.5rem - 62px)
   .content
     width 94%
     margin 0 auto
