@@ -47,7 +47,7 @@
     </div>
 
     <!-- 热门歌单 -->
-    <tip-title :iconCls="'i_recommend'" :title="'推荐歌单'" v-if="songlist"></tip-title>
+    <tip-title :iconCls="'i_recommend'" :title="'推荐歌单'" @click="$router.push('/find/songList')" v-if="songlist"></tip-title>
     <div class="hot-songlist" :gutter="10" v-if="songlist">
       <music-item v-for="(item,index) of songlist" class="songlist" :data="item" :key="index" :index="index" @click="selectPlaylist(index)">
       </music-item>
@@ -151,6 +151,7 @@ export default class App extends Vue {
   upCarouselHeight(index: number) {
     if (!(this.$refs.imgs as Array<HTMLElement>)[index]) return
     let h = (this.$refs.imgs as Array<HTMLElement>)[index].scrollHeight
+    if (h === 0) return
     ;((this.$refs.carousel as Vue).$el.firstChild as HTMLElement).style['height'] = `${h}px`
   }
   getBannerData() {
@@ -268,7 +269,18 @@ export default class App extends Vue {
 
   @Watch('viewport')
   onViewportChange() {
+    console.log('view')
     this.upCarouselHeight(0)
+  }
+  @Watch('$route')
+  onRouteChange(route: any) {
+    if (route.name === 'recommend') {
+      this.$nextTick(() => {
+        for (let i = 0; i < (this.$refs.imgs as any).length; i++) {
+          this.upCarouselHeight(i)
+        }
+      })
+    }
   }
 }
 </script>
