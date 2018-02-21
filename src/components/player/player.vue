@@ -508,7 +508,7 @@ export default class App extends Vue {
           overflow hidden
           white-space nowrap
       .time
-        width 3.1rem
+        width 4rem
         font-size 0.5rem
         flex-shrink 0
         .curr-time

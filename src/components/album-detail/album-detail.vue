@@ -155,18 +155,10 @@ export default class App extends Vue {
   .loading 
     margin-top 4rem
   .blur
-    position absolute
-    top 0
-    width 100%
-    filter blur(80px)
-    background line-gradient(transparent, #fff)
-    background-size 100% 5rem
-    background-repeat no-repeat
-    height 10rem
-    z-index 0
+    blurStyle() 
   .bot
     height 3rem
-  .songs-view
+  .songs-viw
     margin 0 auto
     width 94%
   .info

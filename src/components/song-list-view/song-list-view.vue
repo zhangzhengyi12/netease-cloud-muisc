@@ -77,8 +77,10 @@ export default class App extends Vue {
 .list-view
   margin-top 1rem
   padding-bottom 3rem
+  position relative
   .track
     cursor pointer
+    background-color transparent
     &:nth-child(odd)
       background-color rgb(244, 244, 244)
     &:hover
@@ -86,6 +88,8 @@ export default class App extends Vue {
 .top-bar
   display flex
   margin 0.7rem 0
+  position relative
+  background-color transparent
   .play-all
     display flex
     align-items center

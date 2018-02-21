@@ -144,15 +144,7 @@ export default class App extends Vue {
   padding-bottom 3rem
   height 100%
   .blur
-    position absolute
-    top 0
-    width 100%
-    filter blur(80px)
-    background line-gradient(transparent, #fff)
-    background-size 100% 5rem
-    background-repeat no-repeat
-    height 10rem
-    z-index 0
+    blurStyle()
   .loading
     margin-top 40vh !important
     z-index 2

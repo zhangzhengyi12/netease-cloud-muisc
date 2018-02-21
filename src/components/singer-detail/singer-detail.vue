@@ -212,15 +212,7 @@ export default class App extends Vue {
   .loading 
     margin-top 4rem
   .blur
-    position absolute
-    top 0
-    width 100%
-    filter blur(80px)
-    background line-gradient(transparent, #fff)
-    background-size 100% 5rem
-    background-repeat no-repeat
-    height 10rem
-    z-index 0
+    blurStyle()
   .info
     padding-top 1rem
     width 94%
@@ -281,7 +273,7 @@ export default class App extends Vue {
       padding-bottom 2rem
       position: relative
       padding-right: 24px !important
-      padding-bottom: 24px !important
+      padding-bottom: 36px !important
       .album
         width 20%
         @media (max-width 800px) {
@@ -299,7 +291,7 @@ export default class App extends Vue {
     .songsView
       position: relative
       padding-right: 24px !important
-      padding-bottom: 24px !important
+      padding-bottom: 36px !important
     .simiView
       display flex
       flex-wrap wrap
@@ -307,7 +299,7 @@ export default class App extends Vue {
       padding-bottom 2rem
       position: relative
       padding-right: 24px !important
-      padding-bottom: 24px !important
+      padding-bottom: 36px !important
       .singer
         width 20%
         @media (max-width 800px) {
@@ -328,7 +320,7 @@ export default class App extends Vue {
       padding-right 1rem
       position: relative
       padding-right: 24px !important
-      padding-bottom: 24px !important
+      padding-bottom: 36px !important
       .title
         margin 1rem 0
       .text
